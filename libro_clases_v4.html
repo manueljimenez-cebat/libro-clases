@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Libro de Clases — Prof. Jiménez Manuel</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --purple:#7c3aed;--purple-dark:#6d28d9;--purple-light:#ede9fe;--purple-mid:#ddd6fe;
+  --green:#16a34a;--green-light:#dcfce7;
+  --red:#dc2626;--red-light:#fee2e2;
+  --amber:#d97706;--amber-light:#fef3c7;
+  --slate:#64748b;--slate-light:#f1f5f9;
+  --bg:#f5f5f7;--white:#fff;
+  --border:#e2e0f0;--border-light:#f0eef8;
+  --text:#1e1b2e;--text-2:#6b6880;--text-3:#9d9ab0;
+  --radius:10px;--radius-sm:6px;
+  --D:#7c3aed;--E:#6366f1;--F:#0ea5e9;--G:#10b981;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh;}
+
+/* LOGIN */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#4c1d95,#7c3aed);}
+.login-card{background:white;border-radius:16px;padding:40px;text-align:center;width:340px;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.login-logo{width:56px;height:56px;background:var(--purple);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+.login-logo svg{width:28px;height:28px;fill:white;}
+.login-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.login-sub{font-size:13px;color:var(--text-2);margin-bottom:6px;}
+.login-school{font-size:11px;color:var(--text-3);margin-bottom:28px;}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px;border-radius:8px;border:1.5px solid #e2e8f0;background:white;cursor:pointer;font-size:14px;font-weight:600;color:#374151;transition:all .15s;}
+.btn-google:hover{background:#f9fafb;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+.btn-google svg{width:20px;height:20px;}
+
+/* TOPBAR */
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.brand{display:flex;align-items:center;gap:10px;}
+.logo{width:32px;height:32px;border-radius:8px;background:var(--purple);display:flex;align-items:center;justify-content:center;}
+.logo svg{width:16px;height:16px;fill:white;}
+.brand-name{font-size:15px;font-weight:700;color:var(--purple);}
+.school-name{font-size:11px;color:var(--text-2);}
+.user-area{display:flex;align-items:center;gap:10px;}
+.user-photo{width:30px;height:30px;border-radius:50%;object-fit:cover;}
+.btn-out{font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:white;cursor:pointer;color:var(--text-2);}
+
+/* LAYOUT */
+.layout{display:flex;height:calc(100vh - 52px);}
+.sidebar{width:200px;background:var(--white);border-right:1px solid var(--border);padding:10px 8px;flex-shrink:0;overflow-y:auto;}
+.nav-sec{font-size:10px;font-weight:600;color:var(--text-3);padding:8px 12px 4px;letter-spacing:.08em;text-transform:uppercase;}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;color:var(--text-2);transition:all .12s;margin-bottom:1px;}
+.nav-item:hover{background:var(--purple-light);color:var(--purple);}
+.nav-item.active{background:var(--purple-light);color:var(--purple);font-weight:600;}
+.nav-icon{width:14px;height:14px;flex-shrink:0;}
+.course-item{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:var(--radius-sm);cursor:pointer;font-size:12px;color:var(--text-2);margin-bottom:1px;}
+.course-item:hover{background:var(--border-light);}
+.course-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.main{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+
+/* PAGES */
+.page{display:none;flex:1;overflow:hidden;}
+.page.active{display:flex;}
+.page-scroll{flex:1;overflow-y:auto;padding:24px;}
+
+/* CALENDAR */
+.cal-main{flex:1;overflow-y:auto;padding:20px;}
+.cal-sidebar{width:280px;background:var(--white);border-left:1px solid var(--border);padding:16px;overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column;gap:16px;}
+.greeting{font-size:21px;font-weight:700;color:var(--text);margin-bottom:16px;}
+.view-controls{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.date-nav{display:flex;align-items:center;gap:6px;}
+.nav-arrow{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--text-2);}
+.nav-arrow:hover{background:var(--border-light);}
+.date-label{font-size:16px;font-weight:700;color:var(--text);min-width:210px;text-align:center;}
+.btn-hoy{padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:white;font-size:12px;font-weight:600;cursor:pointer;color:var(--text-2);}
+.view-tabs{display:flex;gap:2px;background:var(--border-light);border-radius:8px;padding:2px;margin-left:auto;}
+.view-tab{padding:5px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text-2);}
+.view-tab.active{background:white;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.1);}
+.event-block{border-radius:10px;padding:14px 16px;cursor:pointer;margin-bottom:10px;border-left:5px solid;transition:transform .1s,box-shadow .1s;}
+.event-block:hover{transform:translateX(3px);box-shadow:0 4px 12px rgba(0,0,0,.08);}
+.event-title{font-size:14px;font-weight:700;}
+.event-time{font-size:12px;margin-top:2px;opacity:.75;}
+.event-tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;align-items:center;}
+.etag{font-size:11px;padding:2px 9px;border-radius:10px;font-weight:600;color:#fff;}
+.etag-empty{font-size:11px;padding:2px 9px;border-radius:10px;font-weight:500;background:#e2e0f0;color:#6b6880;}
+.event-preview{font-size:12px;margin-top:8px;font-style:italic;opacity:.75;line-height:1.5;}
+.week-grid{display:grid;grid-template-columns:64px repeat(5,1fr);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:white;}
+.wg-header{padding:10px 6px;font-size:12px;font-weight:700;text-align:center;background:var(--purple);color:white;border-right:1px solid rgba(255,255,255,.2);}
+.wg-header.today-col{background:#6d28d9;}
+.wg-time{padding:8px 4px;font-size:10px;color:var(--text-3);text-align:right;border-right:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg);}
+.wg-cell{border-right:1px solid var(--border);border-bottom:1px solid var(--border);min-height:40px;padding:3px;}
+.wg-event{border-radius:6px;padding:5px 7px;cursor:pointer;font-size:11px;font-weight:700;border-left:3px solid rgba(0,0,0,.2);transition:filter .1s;}
+.wg-event:hover{filter:brightness(.94);}
+
+/* MINI CAL */
+.mini-cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.mini-cal-title{font-size:13px;font-weight:700;}
+.mini-nav{width:24px;height:24px;border-radius:50%;border:none;background:transparent;cursor:pointer;font-size:14px;color:var(--text-2);}
+.mini-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;}
+.mini-day-hdr{font-size:10px;font-weight:600;color:var(--text-3);text-align:center;padding:3px 0;}
+.mini-day{font-size:12px;text-align:center;cursor:pointer;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;margin:auto;color:var(--text-2);}
+.mini-day:hover{background:var(--purple-light);color:var(--purple);}
+.mini-day.today{background:var(--purple);color:white;font-weight:700;}
+.mini-day.selected{background:var(--purple-light);color:var(--purple);font-weight:700;}
+.mini-day.other-month{color:var(--text-3);}
+.mini-day.weekend{color:var(--red);}
+.mini-day.has-class{position:relative;}
+.mini-day.has-class::after{content:'';width:4px;height:4px;border-radius:50%;background:var(--purple);position:absolute;bottom:1px;left:50%;transform:translateX(-50%);}
+.mini-day.today.has-class::after{background:white;}
+.notes-title{font-size:13px;font-weight:700;margin-bottom:8px;}
+.notes-card{background:#fffde7;border:1px solid #fde68a;border-radius:var(--radius);padding:12px;}
+.notes-area{width:100%;border:none;background:transparent;font-size:13px;color:var(--text);resize:none;min-height:100px;font-family:inherit;outline:none;line-height:1.6;}
+.note-status{font-size:11px;color:#92400e;font-weight:500;margin-top:4px;}
+
+/* CLASE */
+#page-clase{flex-direction:column;}
+.clase-wrap{padding:20px;flex:1;overflow-y:auto;}
+.back-btn{font-size:13px;padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:white;cursor:pointer;color:var(--text-2);margin-bottom:14px;display:inline-flex;align-items:center;gap:5px;}
+.clase-card{background:white;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.clase-header-bar{padding:14px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--border-light);}
+.autosave-bar{display:flex;align-items:center;gap:8px;padding:8px 18px;border-bottom:1px solid #bbf7d0;font-size:12px;color:var(--green);font-weight:600;background:#f0fdf4;}
+.autosave-bar.saving{background:#fef9c3;border-color:#fde047;color:var(--amber);}
+.autosave-bar.idle{background:var(--border-light);border-color:var(--border);color:var(--text-3);}
+.autosave-dot{width:8px;height:8px;border-radius:50%;background:currentColor;}
+.autosave-dot.spin{border-radius:0;background:transparent;border:2px solid currentColor;border-top-color:transparent;animation:spin .6s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.tab-bar{display:flex;background:var(--purple-light);border-bottom:1px solid var(--purple-mid);padding:0 18px;}
+.tab{padding:10px 16px;font-size:13px;cursor:pointer;color:var(--purple);border-bottom:2px solid transparent;font-weight:500;display:flex;align-items:center;gap:6px;}
+.tab:hover{background:rgba(124,58,237,.08);}
+.tab.active{background:white;border-radius:6px 6px 0 0;border-bottom:2px solid white;font-weight:700;}
+.tab-panel{padding:18px;display:none;}
+.tab-panel.active{display:block;}
+.stats-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+.stat-pill{padding:5px 14px;border-radius:20px;font-size:13px;font-weight:600;}
+.pill-green{background:var(--green-light);color:var(--green);}
+.pill-red{background:var(--red-light);color:var(--red);}
+.pill-amber{background:var(--amber-light);color:var(--amber);}
+.pill-slate{background:var(--slate-light);color:var(--slate);}
+.quick-btns{margin-left:auto;display:flex;gap:6px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{font-size:11px;font-weight:600;color:var(--text-2);padding:6px 8px 8px;border-bottom:2px solid var(--border);text-align:left;white-space:nowrap;background:var(--bg);}
+td{padding:8px;border-bottom:1px solid var(--border-light);color:var(--text);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#faf9ff;}
+.num-cell{color:var(--text-3);font-size:12px;width:32px;text-align:center;}
+.run-cell{font-size:11px;color:var(--text-3);}
+.name-crossed{text-decoration:line-through;color:var(--text-3);}
+.ebtn{width:34px;height:28px;border-radius:5px;border:1.5px solid var(--border);cursor:pointer;font-size:11px;font-weight:700;background:white;color:var(--text-3);}
+.ebtn:hover{border-color:#999;}
+.ebtn.on-p{background:var(--green);color:#fff;border-color:var(--green);}
+.ebtn.on-a{background:var(--red);color:#fff;border-color:var(--red);}
+.ebtn.on-at{background:var(--amber);color:#fff;border-color:var(--amber);}
+.ebtn.on-r{background:var(--slate);color:#fff;border-color:var(--slate);}
+.obs-input{font-size:11px;padding:3px 7px;border:1px solid var(--border);border-radius:5px;color:var(--text-2);width:130px;background:white;}
+.lec-label{font-size:12px;color:var(--text-2);margin-bottom:8px;}
+.lec-textarea{width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px;font-size:13px;color:var(--text);min-height:220px;resize:vertical;font-family:inherit;line-height:1.7;outline:none;}
+.lec-textarea:focus{border-color:var(--purple);}
+
+/* FIRMA */
+.firma-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.firma-check-wrap{display:flex;align-items:center;gap:12px;cursor:pointer;}
+.firma-check{width:28px;height:28px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;transition:all .15s;background:white;flex-shrink:0;}
+.firma-check.checked{background:var(--green);border-color:var(--green);}
+.firma-check svg{width:16px;height:16px;stroke:white;fill:none;stroke-width:2.5;}
+.firma-label{font-size:14px;font-weight:600;color:var(--text);}
+.firma-info{font-size:12px;color:var(--text-2);margin-top:3px;}
+.firma-timestamp{font-size:12px;color:var(--green);font-weight:600;background:var(--green-light);padding:4px 10px;border-radius:8px;}
+
+/* GESTIÓN DE CLASES */
+.gestion-filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center;}
+.gestion-table-wrap{background:white;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.status-dot{width:12px;height:12px;border-radius:50%;display:inline-block;}
+.dot-green{background:var(--green);}
+.dot-red{background:var(--red);}
+.completar-btn{font-size:12px;color:var(--purple);font-weight:600;cursor:pointer;background:none;border:none;padding:0;}
+.completar-btn:hover{text-decoration:underline;}
+.badge-curso{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;color:#fff;}
+.pending-toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);cursor:pointer;}
+.toggle-sw{width:36px;height:20px;border-radius:10px;background:var(--border);position:relative;transition:background .2s;cursor:pointer;flex-shrink:0;}
+.toggle-sw.on{background:var(--purple);}
+.toggle-sw::after{content:'';width:16px;height:16px;border-radius:50%;background:white;position:absolute;top:2px;left:2px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.toggle-sw.on::after{left:18px;}
+
+/* ALUMNOS EDITOR */
+.alumno-row-retirado td{color:var(--text-3)!important;text-decoration:line-through;}
+.alumno-row-retirado .ebtn,.alumno-row-retirado input{pointer-events:none;opacity:.4;}
+.btn-retirar{font-size:11px;padding:3px 8px;border-radius:5px;border:1px solid var(--red);color:var(--red);background:white;cursor:pointer;}
+.btn-retirar:hover{background:var(--red-light);}
+.btn-reactivar{font-size:11px;padding:3px 8px;border-radius:5px;border:1px solid var(--green);color:var(--green);background:white;cursor:pointer;}
+
+/* HOJA DE VIDA */
+.hv-card{background:white;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;}
+.hv-header{padding:16px 20px;background:linear-gradient(135deg,var(--purple-light),#f5f3ff);display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--purple-mid);}
+.hv-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;}
+.hv-name{font-size:16px;font-weight:700;color:var(--text);}
+.hv-sub{font-size:12px;color:var(--text-2);}
+.hv-tabs{display:flex;border-bottom:1px solid var(--border);padding:0 20px;background:white;}
+.hv-tab{padding:10px 16px;font-size:13px;cursor:pointer;color:var(--text-2);border-bottom:2px solid transparent;font-weight:500;}
+.hv-tab:hover{color:var(--purple);}
+.hv-tab.active{color:var(--purple);border-bottom-color:var(--purple);font-weight:700;}
+.hv-panel{padding:20px;display:none;}
+.hv-panel.active{display:block;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.form-full{grid-column:1/-1;}
+.fg{display:flex;flex-direction:column;gap:4px;}
+.fg label{font-size:11px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;}
+.fg input,.fg select,.fg textarea{font-size:13px;padding:8px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:white;color:var(--text);width:100%;outline:none;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--purple);}
+.fg textarea{resize:vertical;min-height:70px;font-family:inherit;}
+.obs-entry{border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;position:relative;}
+.obs-type-pos{border-left:4px solid var(--green);}
+.obs-type-neg{border-left:4px solid var(--red);}
+.obs-type-neu{border-left:4px solid var(--amber);}
+.obs-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;margin-bottom:6px;}
+.obs-date{font-size:11px;color:var(--text-3);}
+.obs-text{font-size:13px;color:var(--text);line-height:1.5;}
+.obs-del{position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;color:var(--text-3);font-size:16px;}
+.obs-del:hover{color:var(--red);}
+.nueva-obs-form{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px;}
+
+/* PROGRESO */
+.pct-bar-bg{background:var(--border);border-radius:4px;height:6px;width:80px;overflow:hidden;display:inline-block;vertical-align:middle;}
+.pct-bar{height:100%;border-radius:4px;}
+.badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600;}
+.badge-green{background:var(--green-light);color:var(--green);}
+.badge-red{background:var(--red-light);color:var(--red);}
+.badge-amber{background:var(--amber-light);color:var(--amber);}
+.badge-slate{background:var(--slate-light);color:var(--slate);}
+.lec-item{border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px;background:white;}
+
+/* UTILS */
+.btn{font-size:13px;padding:7px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);background:white;color:var(--text);cursor:pointer;font-weight:500;display:inline-flex;align-items:center;gap:6px;}
+.btn:hover{background:var(--border-light);}
+.btn-sm{font-size:12px;padding:5px 11px;}
+.btn-purple{background:var(--purple);color:#fff;border-color:var(--purple);}
+.btn-purple:hover{background:var(--purple-dark);}
+.btn-outline{border-color:var(--purple);color:var(--purple);}
+.btn-outline:hover{background:var(--purple-light);}
+.page-title{font-size:20px;font-weight:700;margin-bottom:4px;}
+.page-sub{font-size:13px;color:var(--text-2);margin-bottom:20px;}
+.toolbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+select{font-size:13px;padding:7px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:white;color:var(--text);outline:none;}
+.card{background:white;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.loading{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:12px;color:var(--text-2);}
+.spinner{width:32px;height:32px;border:3px solid var(--purple-mid);border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;}
+.empty-state{text-align:center;padding:32px;color:var(--text-2);font-size:13px;}
+.mini-toast{position:fixed;bottom:20px;right:20px;background:#1e1b2e;color:#fff;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:500;opacity:0;transform:translateY(6px);transition:all .2s;pointer-events:none;z-index:9999;}
+.mini-toast.show{opacity:1;transform:translateY(0);}
+.section-sep{border:none;border-top:1px solid var(--border);margin:16px 0;}
+</style>
+</head>
+<body>
+<div id="loading-screen" class="loading"><div class="spinner"></div><span>Cargando...</span></div>
+
+<div id="login-screen" style="display:none;">
+  <div class="login-card">
+    <div class="login-logo"><svg viewBox="0 0 20 20"><path d="M10 2L3 7v11h5v-5h4v5h5V7z"/></svg></div>
+    <div class="login-title">Libro de Clases Digital</div>
+    <div class="login-sub">Prof. Jiménez Manuel</div>
+    <div class="login-school">Centro Educacional Bicentenario Altos de Tomé</div>
+    <button class="btn-google" onclick="loginGoogle()">
+      <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Iniciar sesión con Google
+    </button>
+  </div>
+</div>
+
+<div id="app" style="display:none;">
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo"><svg viewBox="0 0 20 20"><path d="M10 2L3 7v11h5v-5h4v5h5V7z"/></svg></div>
+      <div><div class="brand-name">Libro de Clases</div><div class="school-name">C.E. Bicentenario Altos de Tomé</div></div>
+    </div>
+    <div class="user-area">
+      <img id="user-photo" class="user-photo" src="" style="display:none;"/>
+      <span id="user-name" style="font-size:13px;font-weight:500;"></span>
+      <button class="btn-out" onclick="signOut()">Salir</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="sidebar">
+      <div class="nav-sec">Principal</div>
+      <div class="nav-item active" onclick="goPage('calendario',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M2 6h12M6 2v4M10 2v4"/></svg>Inicio
+      </div>
+      <div class="nav-item" onclick="goPage('gestion',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M2 8h12M2 12h8"/></svg>Gestión de clases
+      </div>
+      <div class="nav-item" onclick="goPage('progreso',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12V8l3-3 3 2 3-4 3 2v5"/></svg>Progreso
+      </div>
+      <div class="nav-item" onclick="goPage('historial',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 3h8M4 6h8M4 9h5"/><rect x="2" y="1" width="12" height="14" rx="1.5"/></svg>Leccionario
+      </div>
+      <div class="nav-item" onclick="goPage('alumnos',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3 2.7-5 6-5s6 2 6 5"/></svg>Estudiantes
+      </div>
+      <div class="nav-sec" style="margin-top:6px;">Cursos</div>
+      <div class="course-item" onclick="abrirCursoHoy('D')"><span class="course-dot" style="background:var(--D);"></span>1° Medio D</div>
+      <div class="course-item" onclick="abrirCursoHoy('E')"><span class="course-dot" style="background:var(--E);"></span>1° Medio E</div>
+      <div class="course-item" onclick="abrirCursoHoy('F')"><span class="course-dot" style="background:var(--F);"></span>1° Medio F</div>
+      <div class="course-item" onclick="abrirCursoHoy('G')"><span class="course-dot" style="background:var(--G);"></span>1° Medio G</div>
+    </div>
+
+    <div class="main">
+      <!-- CALENDARIO -->
+      <div id="page-calendario" class="page active">
+        <div class="cal-main">
+          <div class="greeting" id="greeting">👋</div>
+          <div class="view-controls">
+            <div class="date-nav">
+              <button class="nav-arrow" onclick="navDate(-1)">‹</button>
+              <div class="date-label" id="date-label"></div>
+              <button class="nav-arrow" onclick="navDate(1)">›</button>
+            </div>
+            <button class="btn-hoy" onclick="goToday()">Hoy</button>
+            <div class="view-tabs">
+              <div class="view-tab active" id="tab-dia" onclick="setView('dia')">Día</div>
+              <div class="view-tab" id="tab-semana" onclick="setView('semana')">Semana</div>
+            </div>
+          </div>
+          <div id="cal-content"></div>
+        </div>
+        <div class="cal-sidebar">
+          <div>
+            <div class="mini-cal-header">
+              <button class="mini-nav" onclick="miniNavMonth(-1)">‹</button>
+              <div class="mini-cal-title" id="mini-month-label"></div>
+              <button class="mini-nav" onclick="miniNavMonth(1)">›</button>
+            </div>
+            <div class="mini-grid">
+              <div class="mini-day-hdr">L</div><div class="mini-day-hdr">M</div><div class="mini-day-hdr">X</div>
+              <div class="mini-day-hdr">J</div><div class="mini-day-hdr">V</div>
+              <div class="mini-day-hdr" style="color:var(--red);">S</div>
+              <div class="mini-day-hdr" style="color:var(--red);">D</div>
+            </div>
+            <div class="mini-grid" id="mini-cal-days"></div>
+          </div>
+          <div>
+            <div class="notes-title">📝 Nota del día</div>
+            <div class="notes-card">
+              <textarea class="notes-area" id="notes-area" placeholder="Notas del día..."></textarea>
+              <div class="note-status" id="note-status"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLASE -->
+      <div id="page-clase" class="page">
+        <div class="clase-wrap">
+          <button class="back-btn" onclick="goPage('calendario',null)">← Volver</button>
+          <div class="clase-card">
+            <div class="clase-header-bar" id="clase-header-info"></div>
+            <div class="autosave-bar idle" id="autosave-bar">
+              <div class="autosave-dot" id="autosave-dot"></div>
+              <span id="autosave-text">Sin cambios</span>
+            </div>
+            <div class="tab-bar">
+              <div class="tab active" id="tab-btn-asist" onclick="showClassTab('asist')">✓ Asistencia</div>
+              <div class="tab" id="tab-btn-lec" onclick="showClassTab('lec')">📋 Leccionario</div>
+              <div class="tab" id="tab-btn-firma" onclick="showClassTab('firma')">✍️ Firma</div>
+            </div>
+            <div id="panel-asist" class="tab-panel active">
+              <div class="stats-row">
+                <div class="stat-pill pill-green" id="pill-p">Presentes 0</div>
+                <div class="stat-pill pill-red" id="pill-a">Ausentes 0</div>
+                <div class="stat-pill pill-amber" id="pill-at">Atrasados 0</div>
+                <div class="stat-pill pill-slate" id="pill-r">Retirados 0</div>
+                <div class="quick-btns">
+                  <button class="btn btn-sm btn-outline" onclick="marcarTodos('p')">Todos presentes</button>
+                  <button class="btn btn-sm btn-outline" onclick="copiarAnterior()">Copiar anterior</button>
+                </div>
+              </div>
+              <div style="overflow-x:auto;">
+                <table>
+                  <thead><tr><th>N°</th><th>Estudiante</th><th>RUN</th><th style="color:var(--green);">P</th><th style="color:var(--red);">A</th><th style="color:var(--amber);">AT</th><th style="color:var(--slate);">R</th><th>Observación</th></tr></thead>
+                  <tbody id="asist-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div id="panel-lec" class="tab-panel">
+              <div class="lec-label">Escribe libremente contenidos, actividades y observaciones. Se guarda automáticamente.</div>
+              <textarea class="lec-textarea" id="lec-textarea" placeholder="Ej: Se trabajó comprensión lectora..."></textarea>
+            </div>
+            <div id="panel-firma" class="tab-panel">
+              <div class="firma-box" id="firma-box">
+                <div class="firma-check-wrap" onclick="toggleFirma()">
+                  <div class="firma-check" id="firma-check">
+                    <svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg>
+                  </div>
+                  <div>
+                    <div class="firma-label">Confirmar clase realizada</div>
+                    <div class="firma-info">Al marcar, se registra fecha y hora automáticamente</div>
+                  </div>
+                </div>
+                <div id="firma-timestamp" style="display:none;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GESTIÓN DE CLASES -->
+      <div id="page-gestion" class="page">
+        <div class="page-scroll">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+            <div>
+              <div class="page-title">Gestión de clases</div>
+              <div class="page-sub" style="margin:0;">Manuel Jesús Jiménez Mardones</div>
+            </div>
+            <button class="btn btn-purple" onclick="descargarGestionPDF()">⬇ Descargar PDF</button>
+          </div>
+          <div class="gestion-filters">
+            <select id="g-curso" onchange="renderGestion()"><option value="">Todos los cursos</option><option>1° Medio D</option><option>1° Medio E</option><option>1° Medio F</option><option>1° Medio G</option></select>
+            <div class="pending-toggle" onclick="togglePending()">
+              <div class="toggle-sw" id="pending-sw"></div>
+              <span>Solo clases pendientes</span>
+            </div>
+          </div>
+          <div class="gestion-table-wrap">
+            <table id="gestion-table">
+              <thead><tr><th>Curso</th><th>Fecha</th><th>Horario</th><th>Asistencia</th><th>Leccionario</th><th>Firma</th><th>Acción</th></tr></thead>
+              <tbody id="gestion-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROGRESO -->
+      <div id="page-progreso" class="page">
+        <div class="page-scroll">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+            <div><div class="page-title">Panel de progreso</div><div class="page-sub" style="margin:0;">Asistencia acumulada por alumno</div></div>
+            <button class="btn btn-purple" onclick="descargarPdf('progreso')">⬇ Descargar PDF</button>
+          </div>
+          <div class="toolbar">
+            <select id="prog-curso" onchange="renderProgreso()"><option value="D">1° Medio D</option><option value="E">1° Medio E</option><option value="F">1° Medio F</option><option value="G">1° Medio G</option></select>
+          </div>
+          <div class="card"><table><thead><tr><th>N°</th><th>Estudiante</th><th>P</th><th>A</th><th>AT</th><th>R</th><th>Clases</th><th>% Asistencia</th></tr></thead><tbody id="prog-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- HISTORIAL -->
+      <div id="page-historial" class="page">
+        <div class="page-scroll">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+            <div><div class="page-title">Leccionario</div><div class="page-sub" style="margin:0;">Historial de clases registradas</div></div>
+            <button class="btn btn-purple" onclick="descargarPdf('historial')">⬇ Descargar PDF</button>
+          </div>
+          <div class="toolbar">
+            <select id="hist-curso" onchange="renderHistorial()"><option value="D">1° Medio D</option><option value="E">1° Medio E</option><option value="F">1° Medio F</option><option value="G">1° Medio G</option></select>
+          </div>
+          <div id="hist-list"></div>
+        </div>
+      </div>
+
+      <!-- ESTUDIANTES -->
+      <div id="page-alumnos" class="page">
+        <div class="page-scroll">
+          <div id="alumnos-lista-view">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+              <div><div class="page-title">Estudiantes</div><div class="page-sub" style="margin:0;">Ficha y hoja de vida</div></div>
+            </div>
+            <div class="toolbar">
+              <select id="al-curso" onchange="renderAlumnosList()"><option value="D">1° Medio D</option><option value="E">1° Medio E</option><option value="F">1° Medio F</option><option value="G">1° Medio G</option></select>
+              <button class="btn btn-purple btn-sm" onclick="showAddAlumno()">+ Agregar estudiante</button>
+            </div>
+            <div id="add-alumno-form" style="display:none;background:white;border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:14px;">
+              <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Nuevo estudiante</div>
+              <div class="form-grid" style="margin-bottom:10px;">
+                <div class="fg"><label>Nombre completo</label><input type="text" id="new-nombre" placeholder="Apellido Apellido Nombre Nombre"/></div>
+                <div class="fg"><label>RUN</label><input type="text" id="new-run" placeholder="12.345.678-9"/></div>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <button class="btn btn-purple btn-sm" onclick="agregarAlumno()">Agregar</button>
+                <button class="btn btn-sm" onclick="document.getElementById('add-alumno-form').style.display='none'">Cancelar</button>
+              </div>
+            </div>
+            <div class="card">
+              <table>
+                <thead><tr><th>N°</th><th>Estudiante</th><th>RUN</th><th>Estado</th><th>Acciones</th></tr></thead>
+                <tbody id="alumnos-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+          <!-- FICHA INDIVIDUAL -->
+          <div id="ficha-view" style="display:none;">
+            <button class="back-btn" onclick="showListaAlumnos()" style="margin-bottom:14px;">← Volver a la lista</button>
+            <div class="hv-card">
+              <div class="hv-header" id="ficha-header"></div>
+              <div class="hv-tabs">
+                <div class="hv-tab active" id="hv-tab-datos" onclick="showHvTab('datos')">Datos personales</div>
+                <div class="hv-tab" id="hv-tab-apoderado" onclick="showHvTab('apoderado')">Apoderado</div>
+                <div class="hv-tab" id="hv-tab-hoja" onclick="showHvTab('hoja')">Hoja de vida</div>
+              </div>
+              <div id="hv-panel-datos" class="hv-panel active">
+                <div class="form-grid">
+                  <div class="fg"><label>Apellido Paterno</label><input type="text" id="hv-ap-pat"/></div>
+                  <div class="fg"><label>Apellido Materno</label><input type="text" id="hv-ap-mat"/></div>
+                  <div class="fg"><label>Nombres</label><input type="text" id="hv-nombres"/></div>
+                  <div class="fg"><label>RUN</label><input type="text" id="hv-run"/></div>
+                  <div class="fg"><label>Fecha de nacimiento</label><input type="date" id="hv-nacimiento"/></div>
+                  <div class="fg"><label>Sexo</label><select id="hv-sexo"><option>Masculino</option><option>Femenino</option><option>Otro</option></select></div>
+                  <div class="fg"><label>Nacionalidad</label><input type="text" id="hv-nacionalidad" value="Chilena"/></div>
+                  <div class="fg"><label>Ciudad de nacimiento</label><input type="text" id="hv-ciudad"/></div>
+                  <div class="fg form-full"><label>Dirección</label><input type="text" id="hv-direccion"/></div>
+                  <div class="fg"><label>Teléfono celular</label><input type="text" id="hv-telefono"/></div>
+                  <div class="fg"><label>Email</label><input type="text" id="hv-email"/></div>
+                  <div class="fg"><label>Contacto emergencia</label><input type="text" id="hv-contacto"/></div>
+                  <div class="fg"><label>Teléfono emergencia</label><input type="text" id="hv-tel-emergencia"/></div>
+                </div>
+                <div style="margin-top:14px;display:flex;gap:8px;">
+                  <button class="btn btn-purple btn-sm" onclick="guardarFicha('datos')">Guardar datos</button>
+                </div>
+              </div>
+              <div id="hv-panel-apoderado" class="hv-panel">
+                <div class="form-grid">
+                  <div class="fg"><label>Nombre apoderado</label><input type="text" id="hv-ap-nombre"/></div>
+                  <div class="fg"><label>RUN apoderado</label><input type="text" id="hv-ap-run"/></div>
+                  <div class="fg"><label>Parentesco</label><select id="hv-ap-parentesco"><option>Padre</option><option>Madre</option><option>Abuelo/a</option><option>Tío/a</option><option>Otro</option></select></div>
+                  <div class="fg"><label>Teléfono</label><input type="text" id="hv-ap-tel"/></div>
+                  <div class="fg form-full"><label>Email</label><input type="text" id="hv-ap-email"/></div>
+                  <div class="fg form-full"><label>Dirección</label><input type="text" id="hv-ap-dir"/></div>
+                </div>
+                <div style="margin-top:14px;"><button class="btn btn-purple btn-sm" onclick="guardarFicha('apoderado')">Guardar apoderado</button></div>
+              </div>
+              <div id="hv-panel-hoja" class="hv-panel">
+                <div class="nueva-obs-form">
+                  <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Nueva observación</div>
+                  <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+                    <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="radio" name="obs-tipo" value="positiva" checked> <span style="color:var(--green);font-weight:600;">✓ Positiva</span></label>
+                    <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="radio" name="obs-tipo" value="negativa"> <span style="color:var(--red);font-weight:600;">✗ Negativa</span></label>
+                    <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="radio" name="obs-tipo" value="neutral"> <span style="color:var(--amber);font-weight:600;">● Neutra</span></label>
+                  </div>
+                  <textarea id="nueva-obs-text" style="width:100%;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;min-height:80px;font-family:inherit;outline:none;resize:vertical;" placeholder="Escribe la observación..."></textarea>
+                  <div style="margin-top:8px;"><button class="btn btn-purple btn-sm" onclick="agregarObservacion()">Agregar observación</button></div>
+                </div>
+                <div id="obs-list"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="mini-toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyARX7xJ72e3HCEDQO8wnsVWIiiir3LXAeY",
+  authDomain: "libro-de-clases-manuel.firebaseapp.com",
+  projectId: "libro-de-clases-manuel",
+  storageBucket: "libro-de-clases-manuel.firebasestorage.app",
+  messagingSenderId: "726362397935",
+  appId: "1:726362397935:web:760553d10c90f89bddcf1a"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+window.loginGoogle = async()=>{ try{ await signInWithPopup(auth,provider); }catch(e){ showToast('Error al iniciar sesión'); }};
+window.signOut = async()=>{ await fbSignOut(auth); };
+
+onAuthStateChanged(auth, user=>{
+  document.getElementById('loading-screen').style.display='none';
+  if(user){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    document.getElementById('user-name').textContent=user.displayName||user.email;
+    if(user.photoURL){ const img=document.getElementById('user-photo'); img.src=user.photoURL; img.style.display='block'; }
+    const name=(user.displayName||'').split(' ')[0]||'Profe';
+    const h=new Date().getHours();
+    const sal=h<12?'Buenos días':h<18?'Buenas tardes':'Buenas noches';
+    document.getElementById('greeting').textContent=`${h<12?'🌅':h<18?'☀️':'🌙'} ${sal}, ${name}`;
+    initAll();
+  } else {
+    document.getElementById('login-screen').style.display='flex';
+    document.getElementById('app').style.display='none';
+  }
+});
+
+// ===== DATOS =====
+const COLORS={D:'#7c3aed',E:'#6366f1',F:'#0ea5e9',G:'#10b981'};
+const MESES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const DIAS_N=['','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+const INICIO_AÑO = new Date('2026-03-03');
+const FIN_AÑO = new Date('2026-12-04');
+
+// CLASES agrupadas (un registro por sesión)
+const CLASES=[
+  {id:'Lu_E',dia:1,hi:'10:20',hf:'11:50',curso:'E'},
+  {id:'Lu_G',dia:1,hi:'14:15',hf:'15:45',curso:'G'},
+  {id:'Lu_D',dia:1,hi:'15:55',hf:'16:40',curso:'D'},
+  {id:'Ma_D',dia:2,hi:'10:20',hf:'11:50',curso:'D'},
+  {id:'Ma_F',dia:2,hi:'12:00',hf:'13:30',curso:'F'},
+  {id:'Ma_E',dia:2,hi:'14:15',hf:'15:45',curso:'E'},
+  {id:'Mi_E',dia:3,hi:'08:30',hf:'10:00',curso:'E'},
+  {id:'Mi_G',dia:3,hi:'10:20',hf:'11:50',curso:'G'},
+  {id:'Mi_F',dia:3,hi:'14:15',hf:'15:45',curso:'F'},
+  {id:'Mi_D',dia:3,hi:'15:55',hf:'16:40',curso:'D'},
+  {id:'Ju_F',dia:4,hi:'08:30',hf:'10:00',curso:'F'},
+  {id:'Ju_D',dia:4,hi:'10:20',hf:'11:50',curso:'D'},
+  {id:'Ju_G',dia:4,hi:'12:00',hf:'13:30',curso:'G'},
+  {id:'Ju_E',dia:4,hi:'14:15',hf:'15:45',curso:'E'},
+  {id:'Vi_F',dia:5,hi:'10:20',hf:'11:50',curso:'F'},
+  {id:'Vi_G',dia:5,hi:'12:00',hf:'13:30',curso:'G'},
+  {id:'Vi_D',dia:5,hi:'14:15',hf:'15:45',curso:'D'},
+];
+
+const ALUMNOS_BASE={
+  D:[{num:1,nombre:"Acuña Rodríguez Nicolás Antonio",run:"23.786.235-K"},{num:2,nombre:"Agurto Retamal Francisco Andrés",run:"23.786.016-0"},{num:3,nombre:"Benimelis Celedón Danae Antonella",run:"23.917.407-8"},{num:4,nombre:"Campos Roa Monserratt Alejandra",run:"23.149.563-0"},{num:5,nombre:"Carrasco Riquelme Valentina Pascal",run:"23.752.468-3"},{num:6,nombre:"Cuevas Gutiérrez Antonella Anaís",run:"23.919.762-0"},{num:7,nombre:"Flores Velásquez Antonella Pascal",run:"23.823.035-7"},{num:8,nombre:"Gutiérrez Muñoz Tomás Agustín",run:"23.896.112-2"},{num:9,nombre:"Molina Gálvez Mayra Antonella",run:"23.675.913-K"},{num:10,nombre:"Nanjari Carrasco Zahir Andrés",run:"23.746.215-7"},{num:11,nombre:"Palma Ulloa Rubén Alejandro",run:"23.620.909-1"},{num:12,nombre:"Peña Andrade Colomba Leonor",run:"23.869.188-5"},{num:13,nombre:"Placencia Riquelme Yuliana Pascal",run:"23.780.707-3"},{num:14,nombre:"Rojas Mellado Julieta Ignacia",run:"23.785.797-6"},{num:15,nombre:"Sánchez Henríquez Isidora Monserrat",run:"23.642.918-0"},{num:16,nombre:"Sepúlveda Sepúlveda Natividad Monserrat",run:"23.804.371-9"},{num:17,nombre:"Tapia Pérez Quimey Lucía",run:"23.965.763-K"},{num:18,nombre:"Torres Delgado Millaray Isidora",run:"23.969.322-9"},{num:19,nombre:"Ulloa Salgado Mylene Karina",run:"23.759.069-4"}],
+  E:[{num:1,nombre:"Acevedo Iturriaga Matías Iván",run:"23.806.477-5"},{num:2,nombre:"Araneda Salazar Belén Elizabeth",run:"23.943.900-4"},{num:3,nombre:"Caperton Castillo Isaiah Andrew",run:"25.098.952-0"},{num:4,nombre:"Carrasco Sepúlveda Emmanuel Alfonso",run:"23.691.500-K"},{num:5,nombre:"Cuevas Méndez Stefano Eduardo",run:"23.782.568-3"},{num:6,nombre:"Fischer Fischer Herbert Luciano",run:"23.862.656-0"},{num:7,nombre:"Gajardo Pizarro Matías Ignacio",run:"23.889.732-7"},{num:8,nombre:"Garrido Toledo María Victoria Paz",run:"23.699.792-8"},{num:9,nombre:"Irribarra Román Javier Ignacio",run:"23.749.838-0"},{num:11,nombre:"Muñoz Mella Maira Dominique",run:"23.909.259-4"},{num:12,nombre:"Ramírez Leiva Trinidad Alexandra",run:"23.675.327-1"},{num:13,nombre:"Rojas Valenzuela Nelly Isabel",run:"23.266.894-6"},{num:14,nombre:"Rubio Hidalgo Gabriela Monserrat",run:"23.693.702-K"},{num:15,nombre:"San Martín Hidalgo Emilia Trinidad",run:"23.841.692-2"},{num:16,nombre:"Soto Morales Antonia Belén",run:"23.692.954-K"},{num:17,nombre:"Torres Aravena Matías Ignacio",run:"23.752.370-9"},{num:18,nombre:"Villegas Barriento Julio Elizardo",run:"23.775.274-0"}],
+  F:[{num:1,nombre:"Coloma Vilugrón Dominique Atenea",run:"23.707.933-7"},{num:2,nombre:"Contreras Velásquez Valentina Francisca",run:"23.732.138-3"},{num:3,nombre:"Fuentes Gómez Pedro Alberto",run:"23.995.891-5"},{num:4,nombre:"Herrera Sanhueza Ainara Isadora",run:"23.786.021-7"},{num:5,nombre:"Irribarra Mora Martín Alonso",run:"23.750.390-2"},{num:6,nombre:"Irribarra Mora Máximo Rafael",run:"23.750.439-9"},{num:7,nombre:"Jaque Quijada Angelique Mariela",run:"23.937.882-K"},{num:8,nombre:"Latorre Ramírez Cristóbal Andrés",run:"23.945.728-2"},{num:9,nombre:"Martínez Cisternas Héctor Alejandro",run:"23.783.662-6"},{num:10,nombre:"Medina Rocha Henry Isaías",run:"23.678.283-2"},{num:11,nombre:"Muñoz Andrade Monserrat Belén",run:"23.895.175-5"},{num:12,nombre:"Otárola Jara Anaís Belén",run:"23.860.803-1"},{num:13,nombre:"Parra Cisterna Patricio Leonardo",run:"23.738.080-0"},{num:14,nombre:"Rodríguez Navidad Josefa Antonia",run:"23.854.409-2"},{num:15,nombre:"Reyes Baeza Esteban Alonso",run:"23.680.091-1"},{num:16,nombre:"Medina Rocha Benjamín Ariel",run:"23.678.332-4"},{num:17,nombre:"Irribarra Mora Catalina Ignacia",run:"23.750.424-0"}],
+  G:[{num:1,nombre:"Binimelis Álvarez Teresa Antonella",run:"23.892.292-5"},{num:2,nombre:"Bustos Flores Antonella Monserrat",run:"23.660.651-1"},{num:3,nombre:"García Rabanal Angelina Jeanethe",run:"23.824.148-0"},{num:4,nombre:"Garretón Hernández Javier Adolfo",run:"23.814.673-9"},{num:5,nombre:"Lara Gallegos Danahe Anaís",run:"23.729.061-5"},{num:6,nombre:"Macías Cartes Esteban Gonzalo",run:"23.886.089-K"},{num:7,nombre:"Martínez Darat Agustín Alonso",run:"23.865.996-5"},{num:8,nombre:"Muñoz Catril Isabella Anahís",run:"23.799.286-5"},{num:9,nombre:"Muñoz Gómez Dylan Yohussef",run:"23.816.622-5"},{num:10,nombre:"Muñoz Neira Eliza Efziba",run:"23.836.634-8"},{num:11,nombre:"Ortiz Díaz Máximo Vicente",run:"23.773.013-5"},{num:12,nombre:"Vejar Alvear Amanda Paz",run:"23.832.935-3"},{num:13,nombre:"Coronado Melo Phillips Anthony",run:"23.838.907-0"},{num:14,nombre:"Zapata Araneda Mauro Álvaro",run:"23.990.470-K"},{num:15,nombre:"Arellano Hueichaleo Matías Alonso",run:"23.721.156-1"},{num:16,nombre:"Zamorano Jofré Maximiliano Alonzo",run:"23.978.780-0"},{num:17,nombre:"Morales Mardones Alanis Alejandra",run:"23.945.473-9"}]
+};
+
+// Lista dinámica de alumnos (con retirados y nuevos)
+let ALUMNOS={D:[...ALUMNOS_BASE.D],E:[...ALUMNOS_BASE.E],F:[...ALUMNOS_BASE.F],G:[...ALUMNOS_BASE.G]};
+
+function fechaStr(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function claseKey(fecha,claseId){ return `${fecha}_${claseId}`; }
+function clasesDelDia(date){ const dw=date.getDay(); return CLASES.filter(c=>c.dia===dw); }
+function esFechaValida(d){ return d>=INICIO_AÑO && d<=FIN_AÑO && d.getDay()!==0 && d.getDay()!==6; }
+
+// Cache
+let cacheAsist={}, cacheLec={}, cacheFirma={};
+
+async function initAll(){
+  await loadAlumnos();
+  renderMiniCal(); renderCalendar(); loadNote();
+  setupNoteAutosave(); setupLecAutosave();
+}
+
+// ===== LOAD/SAVE ALUMNOS =====
+async function loadAlumnos(){
+  for(const curso of ['D','E','F','G']){
+    const snap=await getDoc(doc(db,'alumnos',curso));
+    if(snap.exists()) ALUMNOS[curso]=snap.data().lista;
+  }
+}
+async function saveAlumnos(curso){
+  await setDoc(doc(db,'alumnos',curso),{lista:ALUMNOS[curso]});
+}
+
+// ===== MINI CAL =====
+let currentDate=new Date(), currentView='dia', miniMonthDate=new Date();
+window.miniNavMonth=dir=>{ miniMonthDate.setMonth(miniMonthDate.getMonth()+dir); renderMiniCal(); };
+function renderMiniCal(){
+  const y=miniMonthDate.getFullYear(),m=miniMonthDate.getMonth();
+  document.getElementById('mini-month-label').textContent=`${MESES[m]} ${y}`;
+  const first=new Date(y,m,1);
+  let dow=first.getDay(); if(dow===0)dow=7;
+  const dim=new Date(y,m+1,0).getDate();
+  const today=new Date();
+  let html='';
+  for(let i=1;i<dow;i++) html+=`<div class="mini-day other-month"></div>`;
+  for(let d=1;d<=dim;d++){
+    const date=new Date(y,m,d);
+    const isT=date.toDateString()===today.toDateString();
+    const isS=date.toDateString()===currentDate.toDateString();
+    const dw2=date.getDay(); const isWE=dw2===0||dw2===6;
+    const hasC=CLASES.some(c=>c.dia===dw2)&&esFechaValida(date);
+    html+=`<div class="mini-day${isT?' today':isS?' selected':isWE?' weekend':''}${hasC?' has-class':''}" onclick="selectDay(${y},${m},${d})">${d}</div>`;
+  }
+  document.getElementById('mini-cal-days').innerHTML=html;
+}
+window.selectDay=(y,m,d)=>{ currentDate=new Date(y,m,d); currentView='dia'; document.getElementById('tab-dia').className='view-tab active'; document.getElementById('tab-semana').className='view-tab'; renderCalendar(); renderMiniCal(); loadNote(); };
+window.navDate=dir=>{ if(currentView==='dia') currentDate.setDate(currentDate.getDate()+dir); else currentDate.setDate(currentDate.getDate()+dir*7); renderCalendar(); renderMiniCal(); loadNote(); };
+window.goToday=()=>{ currentDate=new Date(); renderCalendar(); renderMiniCal(); loadNote(); };
+window.setView=v=>{ currentView=v; document.getElementById('tab-dia').className='view-tab'+(v==='dia'?' active':''); document.getElementById('tab-semana').className='view-tab'+(v==='semana'?' active':''); renderCalendar(); };
+
+async function renderCalendar(){ if(currentView==='dia') await renderDayView(); else await renderWeekView(); }
+
+async function renderDayView(){
+  const d=currentDate, dw=d.getDay();
+  const nombres=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  document.getElementById('date-label').textContent=`${nombres[dw]} ${d.getDate()} ${MESES[d.getMonth()]} ${d.getFullYear()}`;
+  const clases=clasesDelDia(d).filter(()=>esFechaValida(d)||true);
+  const fstr=fechaStr(d);
+  if(!clases.length||!esFechaValida(d)){
+    document.getElementById('cal-content').innerHTML=`<div style="text-align:center;padding:60px;color:var(--text-3);font-size:14px;">Sin clases este día 🎉</div>`; return;
+  }
+  await Promise.all(clases.map(async c=>{
+    const key=claseKey(fstr,c.id);
+    if(cacheAsist[key]===undefined){ const s=await getDoc(doc(db,'asistencia',key)); cacheAsist[key]=s.exists()?s.data():null; }
+    if(cacheLec[key]===undefined){ const s=await getDoc(doc(db,'leccionario',key)); cacheLec[key]=s.exists()?s.data().texto||'':''; }
+    if(cacheFirma[key]===undefined){ const s=await getDoc(doc(db,'firma',key)); cacheFirma[key]=s.exists()?s.data():null; }
+  }));
+  let html='';
+  clases.forEach(c=>{
+    const key=claseKey(fstr,c.id);
+    const color=COLORS[c.curso];
+    const hasA=cacheAsist[key]!==null&&cacheAsist[key]!==undefined;
+    const hasL=cacheLec[key]&&cacheLec[key].length>0;
+    const hasFirma=cacheFirma[key]&&cacheFirma[key].firmado;
+    const preview=cacheLec[key]?cacheLec[key].substring(0,80)+(cacheLec[key].length>80?'...':''):'';
+    html+=`<div class="event-block" style="background:${color}14;border-left-color:${color};" onclick="abrirClase('${fstr}','${c.id}','${c.curso}','${c.hi}','${c.hf}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div><div class="event-title" style="color:${color};">Lengua y Literatura — 1° Medio ${c.curso}</div><div class="event-time" style="color:${color};">${c.hi} – ${c.hf}</div></div>
+        <span style="background:${color};color:#fff;padding:3px 11px;border-radius:12px;font-size:12px;font-weight:700;">1° ${c.curso}</span>
+      </div>
+      <div class="event-tags">
+        ${hasA?`<span class="etag" style="background:${color};">✓ Asistencia</span>`:`<span class="etag-empty">Sin asistencia</span>`}
+        ${hasL?`<span class="etag" style="background:#0369a1;">✓ Leccionario</span>`:`<span class="etag-empty">Sin leccionario</span>`}
+        ${hasFirma?`<span class="etag" style="background:var(--green);">✓ Firmado</span>`:`<span class="etag-empty">Sin firma</span>`}
+      </div>
+      ${preview?`<div class="event-preview" style="color:${color}cc;">"${preview}"</div>`:''}
+    </div>`;
+  });
+  document.getElementById('cal-content').innerHTML=html;
+}
+
+async function renderWeekView(){
+  const d=new Date(currentDate); const dw=d.getDay(); const diff=dw===0?-6:1-dw; d.setDate(d.getDate()+diff);
+  const lunes=new Date(d); const viernes=new Date(d); viernes.setDate(d.getDate()+4);
+  document.getElementById('date-label').textContent=`${lunes.getDate()} ${MESES[lunes.getMonth()]} — ${viernes.getDate()} ${MESES[viernes.getMonth()]} ${viernes.getFullYear()}`;
+  const dias=[]; for(let i=0;i<5;i++){ const x=new Date(lunes); x.setDate(lunes.getDate()+i); dias.push(x); }
+  await Promise.all(dias.flatMap(dia=>clasesDelDia(dia).map(async c=>{
+    const key=claseKey(fechaStr(dia),c.id);
+    if(cacheAsist[key]===undefined){ const s=await getDoc(doc(db,'asistencia',key)); cacheAsist[key]=s.exists()?s.data():null; }
+    if(cacheFirma[key]===undefined){ const s=await getDoc(doc(db,'firma',key)); cacheFirma[key]=s.exists()?s.data():null; }
+  })));
+  const horas=['08:30','10:20','12:00','14:15','15:55'];
+  const DC=['Lu','Ma','Mi','Ju','Vi'];
+  let html='<div class="week-grid"><div class="wg-header" style="background:#4c1d95;font-size:11px;">Hora</div>';
+  dias.forEach((dia,i)=>{ const isT=dia.toDateString()===new Date().toDateString(); html+=`<div class="wg-header${isT?' today-col':''}">${DC[i]} ${dia.getDate()}</div>`; });
+  horas.forEach(hora=>{
+    html+=`<div class="wg-time">${hora}</div>`;
+    dias.forEach(dia=>{
+      const fstr=fechaStr(dia); const clase=clasesDelDia(dia).find(c=>c.hi===hora);
+      if(clase&&esFechaValida(dia)){
+        const key=claseKey(fstr,clase.id); const color=COLORS[clase.curso];
+        const hasA=cacheAsist[key]!==null&&cacheAsist[key]!==undefined;
+        const hasFirma=cacheFirma[key]&&cacheFirma[key].firmado;
+        html+=`<div class="wg-cell"><div class="wg-event" style="background:${color}18;border-left-color:${color};color:${color};" onclick="abrirClase('${fstr}','${clase.id}','${clase.curso}','${clase.hi}','${clase.hf}')">1° ${clase.curso}<br/><span style="font-weight:400;font-size:10px;">${clase.hi}–${clase.hf}</span><div style="font-size:10px;margin-top:2px;">${hasA?'✓ asist':''} ${hasFirma?'✓ firma':''}</div></div></div>`;
+      } else { html+=`<div class="wg-cell"></div>`; }
+    });
+  });
+  html+='</div>'; document.getElementById('cal-content').innerHTML=html;
+}
+
+// ===== NOTES =====
+let noteTimer=null;
+async function loadNote(){
+  const key='nota_'+fechaStr(currentDate);
+  const snap=await getDoc(doc(db,'notas',key));
+  document.getElementById('notes-area').value=snap.exists()?snap.data().texto||'':'';
+  document.getElementById('note-status').textContent='';
+}
+function setupNoteAutosave(){
+  document.getElementById('notes-area').addEventListener('input',()=>{
+    document.getElementById('note-status').textContent='Guardando...';
+    clearTimeout(noteTimer);
+    noteTimer=setTimeout(async()=>{
+      await setDoc(doc(db,'notas','nota_'+fechaStr(currentDate)),{texto:document.getElementById('notes-area').value,fecha:fechaStr(currentDate)});
+      document.getElementById('note-status').textContent='✓ Guardado';
+    },1200);
+  });
+}
+
+// ===== AUTOSAVE =====
+let saveTimer=null;
+function setAutosaveState(state){
+  const bar=document.getElementById('autosave-bar'),dot=document.getElementById('autosave-dot'),txt=document.getElementById('autosave-text');
+  if(state==='saved'){ bar.className='autosave-bar'; dot.className='autosave-dot'; txt.textContent='✓ Información guardada'; }
+  else if(state==='saving'){ bar.className='autosave-bar saving'; dot.className='autosave-dot spin'; txt.textContent='Guardando...'; }
+  else { bar.className='autosave-bar idle'; dot.className='autosave-dot'; txt.textContent='Sin cambios'; }
+}
+function triggerAutosave(fn){ setAutosaveState('saving'); clearTimeout(saveTimer); saveTimer=setTimeout(async()=>{ await fn(); setAutosaveState('saved'); },900); }
+
+// ===== CLASE =====
+let currentClase=null, asistTemp={}, obsTemp={};
+
+window.abrirClase=async(fecha,claseId,curso,hi,hf)=>{
+  currentClase={key:claseKey(fecha,claseId),fecha,claseId,curso,hi,hf};
+  const color=COLORS[curso], dobj=new Date(fecha+'T12:00:00');
+  document.getElementById('clase-header-info').innerHTML=`
+    <span style="background:${color};color:#fff;padding:3px 12px;border-radius:20px;font-size:13px;font-weight:700;">1° Medio ${curso}</span>
+    <span style="font-size:15px;font-weight:700;">Lengua y Literatura</span>
+    <span style="font-size:13px;color:var(--text-2);">${DIAS_N[dobj.getDay()]} ${dobj.getDate()} ${MESES[dobj.getMonth()]} ${dobj.getFullYear()} · ${hi}–${hf}</span>`;
+  setAutosaveState('idle'); showClassTab('asist'); await cargarClase(); goPage('clase',null);
+};
+
+async function cargarClase(){
+  const {key,curso}=currentClase;
+  const [as,ls,fs]=await Promise.all([getDoc(doc(db,'asistencia',key)),getDoc(doc(db,'leccionario',key)),getDoc(doc(db,'firma',key))]);
+  asistTemp={}; obsTemp={};
+  const alumnos=ALUMNOS[curso].filter(a=>!a.retirado);
+  if(as.exists()){ alumnos.forEach((_,i)=>{ asistTemp[i]=as.data()['est_'+i]||'p'; obsTemp[i]=as.data()['obs_'+i]||''; }); }
+  else { alumnos.forEach((_,i)=>{ asistTemp[i]='p'; obsTemp[i]=''; }); }
+  document.getElementById('lec-textarea').value=ls.exists()?ls.data().texto||'':'';
+  // Firma
+  const firmado=fs.exists()&&fs.data().firmado;
+  const firmaCheck=document.getElementById('firma-check');
+  const firmaTs=document.getElementById('firma-timestamp');
+  if(firmado){ firmaCheck.classList.add('checked'); firmaTs.style.display='block'; firmaTs.innerHTML=`<span class="firma-timestamp">✓ Firmado el ${fs.data().fecha} a las ${fs.data().hora}</span>`; }
+  else { firmaCheck.classList.remove('checked'); firmaTs.style.display='none'; }
+  updateStats(); renderAsistRows();
+}
+
+function renderAsistRows(){
+  const tbody=document.getElementById('asist-tbody'); tbody.innerHTML='';
+  const alumnos=ALUMNOS[currentClase.curso];
+  alumnos.forEach((a,i)=>{
+    if(a.retirado){
+      const tr=document.createElement('tr'); tr.className='alumno-row-retirado';
+      tr.innerHTML=`<td class="num-cell">${a.num}</td><td style="text-decoration:line-through;color:var(--text-3);">${a.nombre}</td><td class="run-cell">${a.run||''}</td><td colspan="5" style="color:var(--text-3);font-size:12px;font-style:italic;">Retirado/a</td>`;
+      tbody.appendChild(tr); return;
+    }
+    const est=asistTemp[i]||'p';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="num-cell">${a.num}</td><td>${a.nombre}</td><td class="run-cell">${a.run||''}</td>
+      <td><button class="ebtn ${est==='p'?'on-p':''}" onclick="setEst(${i},'p')">P</button></td>
+      <td><button class="ebtn ${est==='a'?'on-a':''}" onclick="setEst(${i},'a')">A</button></td>
+      <td><button class="ebtn ${est==='at'?'on-at':''}" onclick="setEst(${i},'at')">AT</button></td>
+      <td><button class="ebtn ${est==='r'?'on-r':''}" onclick="setEst(${i},'r')">R</button></td>
+      <td><input class="obs-input" placeholder="Observación..." value="${obsTemp[i]||''}" onchange="obsChanged(${i},this.value)"/></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+window.setEst=(idx,est)=>{
+  asistTemp[idx]=est;
+  const tbody=document.getElementById('asist-tbody');
+  let rowIdx=0;
+  ALUMNOS[currentClase.curso].forEach((a,i)=>{ if(!a.retirado){ if(i===idx){ const row=tbody.rows[rowIdx]; ['p','a','at','r'].forEach((e,j)=>{ row.cells[3+j].querySelector('.ebtn').className='ebtn'+(est===e?' on-'+e:''); }); } rowIdx++; } });
+  updateStats(); triggerAutosave(saveAsistencia);
+};
+window.obsChanged=(idx,val)=>{ obsTemp[idx]=val; triggerAutosave(saveAsistencia); };
+
+function updateStats(){
+  const c={p:0,a:0,at:0,r:0};
+  Object.values(asistTemp).forEach(v=>c[v]++);
+  document.getElementById('pill-p').textContent='Presentes '+c.p;
+  document.getElementById('pill-a').textContent='Ausentes '+c.a;
+  document.getElementById('pill-at').textContent='Atrasados '+c.at;
+  document.getElementById('pill-r').textContent='Retirados '+c.r;
+}
+
+async function saveAsistencia(){
+  if(!currentClase) return;
+  const data={savedAt:new Date().toISOString(),curso:currentClase.curso,fecha:currentClase.fecha};
+  ALUMNOS[currentClase.curso].forEach((a,i)=>{ data['est_'+i]=asistTemp[i]||'p'; data['obs_'+i]=obsTemp[i]||''; });
+  await setDoc(doc(db,'asistencia',currentClase.key),data);
+  cacheAsist[currentClase.key]=data;
+}
+
+window.marcarTodos=est=>{ ALUMNOS[currentClase.curso].forEach((_,i)=>{ if(!ALUMNOS[currentClase.curso][i].retirado) asistTemp[i]=est; }); renderAsistRows(); updateStats(); triggerAutosave(saveAsistencia); };
+
+window.copiarAnterior=async()=>{
+  const {fecha,curso,claseId}=currentClase;
+  const d=new Date(fecha+'T12:00:00');
+  for(let i=1;i<=14;i++){
+    const prev=new Date(d); prev.setDate(d.getDate()-i);
+    if(!esFechaValida(prev)) continue;
+    const mismaClase=CLASES.find(c=>c.curso===curso&&c.dia===prev.getDay());
+    if(mismaClase){
+      const prevKey=claseKey(fechaStr(prev),mismaClase.id);
+      const snap=await getDoc(doc(db,'asistencia',prevKey));
+      if(snap.exists()){ ALUMNOS[curso].forEach((_,j)=>{ asistTemp[j]=snap.data()['est_'+j]||'p'; }); renderAsistRows(); updateStats(); triggerAutosave(saveAsistencia); showToast('Asistencia copiada ✓'); return; }
+    }
+  }
+  showToast('No hay clase anterior con datos');
+};
+
+function setupLecAutosave(){
+  document.getElementById('lec-textarea').addEventListener('input',()=>{ triggerAutosave(saveLec); });
+}
+async function saveLec(){
+  if(!currentClase) return;
+  const texto=document.getElementById('lec-textarea').value;
+  await setDoc(doc(db,'leccionario',currentClase.key),{texto,curso:currentClase.curso,fecha:currentClase.fecha,hi:currentClase.hi,hf:currentClase.hf,savedAt:new Date().toISOString()});
+  cacheLec[currentClase.key]=texto;
+}
+
+window.showClassTab=tab=>{
+  ['asist','lec','firma'].forEach(t=>{ document.getElementById('panel-'+t).className='tab-panel'+(t===tab?' active':''); document.getElementById('tab-btn-'+t).className='tab'+(t===tab?' active':''); });
+};
+
+// ===== FIRMA =====
+window.toggleFirma=async()=>{
+  if(!currentClase) return;
+  const check=document.getElementById('firma-check');
+  const ts=document.getElementById('firma-timestamp');
+  const isFirmado=check.classList.contains('checked');
+  if(!isFirmado){
+    check.classList.add('checked');
+    const now=new Date();
+    const fecha=`${now.getDate().toString().padStart(2,'0')}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getFullYear()}`;
+    const hora=`${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+    await setDoc(doc(db,'firma',currentClase.key),{firmado:true,fecha,hora,savedAt:now.toISOString(),curso:currentClase.curso,fechaClase:currentClase.fecha});
+    cacheFirma[currentClase.key]={firmado:true,fecha,hora};
+    ts.style.display='block'; ts.innerHTML=`<span class="firma-timestamp">✓ Firmado el ${fecha} a las ${hora}</span>`;
+    setAutosaveState('saved'); showToast('Clase firmada ✓');
+  } else {
+    check.classList.remove('checked'); ts.style.display='none';
+    await deleteDoc(doc(db,'firma',currentClase.key));
+    cacheFirma[currentClase.key]=null;
+    setAutosaveState('saved');
+  }
+};
+
+// ===== GESTIÓN DE CLASES =====
+let showPending=false;
+window.togglePending=()=>{ showPending=!showPending; document.getElementById('pending-sw').className='toggle-sw'+(showPending?' on':''); renderGestion(); };
+
+window.renderGestion=async()=>{
+  const filtroCurso=document.getElementById('g-curso').value;
+  const tbody=document.getElementById('gestion-tbody');
+  tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--text-3);">Cargando...</td></tr>`;
+  const rows=[];
+  for(let d=new Date(INICIO_AÑO);d<=FIN_AÑO;d.setDate(d.getDate()+1)){
+    if(d.getDay()===0||d.getDay()===6) continue;
+    const fstr=fechaStr(new Date(d));
+    const clasesDia=clasesDelDia(new Date(d));
+    for(const c of clasesDia){
+      if(filtroCurso&&filtroCurso!==`1° Medio ${c.curso}`) continue;
+      const key=claseKey(fstr,c.id);
+      const [as,ls,fs]=await Promise.all([getDoc(doc(db,'asistencia',key)),getDoc(doc(db,'leccionario',key)),getDoc(doc(db,'firma',key))]);
+      const hasA=as.exists(); const hasL=ls.exists()&&ls.data().texto; const hasFirma=fs.exists()&&fs.data().firmado;
+      if(showPending&&hasA&&hasL&&hasFirma) continue;
+      const dobj=new Date(fstr+'T12:00:00');
+      rows.push({curso:c.curso,fecha:fstr,fechaDisp:`${dobj.getDate().toString().padStart(2,'0')}/${(dobj.getMonth()+1).toString().padStart(2,'0')}/${dobj.getFullYear()}`,horario:`${c.hi} a ${c.hf}`,hasA,hasL,hasFirma,claseId:c.id,hi:c.hi,hf:c.hf});
+    }
+  }
+  rows.sort((a,b)=>b.fecha.localeCompare(a.fecha));
+  if(!rows.length){ tbody.innerHTML=`<tr><td colspan="7" class="empty-state">No hay clases para mostrar</td></tr>`; return; }
+  const dot=(has)=>`<span class="status-dot ${has?'dot-green':'dot-red'}"></span>`;
+  tbody.innerHTML=rows.map(r=>`<tr>
+    <td><span class="badge-curso" style="background:${COLORS[r.curso]};">1° Medio ${r.curso}</span></td>
+    <td style="font-size:12px;">${r.fechaDisp}</td>
+    <td style="font-size:12px;">${r.horario}</td>
+    <td style="text-align:center;">${dot(r.hasA)}</td>
+    <td style="text-align:center;">${dot(r.hasL)}</td>
+    <td style="text-align:center;">${dot(r.hasFirma)}</td>
+    <td><button class="completar-btn" onclick="abrirClase('${r.fecha}','${r.claseId}','${r.curso}','${r.hi}','${r.hf}')">${r.hasA&&r.hasL&&r.hasFirma?'Visualizar →':'Completar →'}</button></td>
+  </tr>`).join('');
+};
+
+window.descargarGestionPDF=()=>{ window.print(); showToast('Abriendo impresión...'); };
+window.descargarPdf=tipo=>{ window.print(); showToast('Abriendo impresión...'); };
+
+// ===== PROGRESO =====
+window.renderProgreso=async()=>{
+  const curso=document.getElementById('prog-curso').value;
+  const docs=[];
+  for(let d=new Date(INICIO_AÑO);d<=FIN_AÑO;d.setDate(d.getDate()+1)){
+    const clasesDia=CLASES.filter(c=>c.curso===curso&&c.dia===d.getDay());
+    for(const cl of clasesDia){
+      const key=claseKey(fechaStr(new Date(d)),cl.id);
+      const snap=await getDoc(doc(db,'asistencia',key));
+      if(snap.exists()) docs.push(snap.data());
+    }
+  }
+  document.getElementById('prog-tbody').innerHTML=(ALUMNOS[curso]||[]).map((a,i)=>{
+    let p=0,au=0,at=0,r=0;
+    docs.forEach(d=>{ const e=d['est_'+i]; if(e==='p')p++; else if(e==='a')au++; else if(e==='at')at++; else if(e==='r')r++; });
+    const tot=p+au+at+r; const pct=tot?Math.round((p+at)*100/tot):null;
+    const pctStr=pct!==null?pct+'%':'—';
+    const bc=pct===null?'#ccc':pct>=90?'var(--green)':pct>=80?'var(--amber)':'var(--red)';
+    const tc=pct===null?'':pct>=90?'color:var(--green);font-weight:600;':pct>=80?'color:var(--amber);font-weight:600;':'color:var(--red);font-weight:600;';
+    return `<tr class="${a.retirado?'alumno-row-retirado':''}"><td class="num-cell">${a.num}</td><td>${a.nombre}</td><td><span class="badge badge-green">${p}</span></td><td><span class="badge badge-red">${au}</span></td><td><span class="badge badge-amber">${at}</span></td><td><span class="badge badge-slate">${r}</span></td><td>${tot}</td><td><div style="display:flex;align-items:center;gap:8px;"><div class="pct-bar-bg"><div class="pct-bar" style="width:${pct||0}%;background:${bc};"></div></div><span style="${tc}">${pctStr}</span></div></td></tr>`;
+  }).join('');
+};
+
+// ===== HISTORIAL =====
+window.renderHistorial=async()=>{
+  const curso=document.getElementById('hist-curso').value; const color=COLORS[curso]; const items=[];
+  for(let d=new Date(INICIO_AÑO);d<=FIN_AÑO;d.setDate(d.getDate()+1)){
+    const clasesDia=CLASES.filter(c=>c.curso===curso&&c.dia===d.getDay());
+    for(const cl of clasesDia){
+      const key=claseKey(fechaStr(new Date(d)),cl.id);
+      const snap=await getDoc(doc(db,'leccionario',key));
+      if(snap.exists()&&snap.data().texto) items.push({...snap.data(),fecha:fechaStr(new Date(d)),hi:cl.hi,hf:cl.hf});
+    }
+  }
+  const list=document.getElementById('hist-list');
+  if(!items.length){ list.innerHTML='<div class="empty-state">No hay leccionario para 1° '+curso+' aún.</div>'; return; }
+  list.innerHTML=items.reverse().map(l=>{
+    const dobj=new Date(l.fecha+'T12:00:00');
+    return `<div class="lec-item"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;"><span style="background:${color};color:#fff;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:700;">1° ${l.curso}</span><span style="font-size:12px;color:var(--text-2);">${DIAS_N[dobj.getDay()]} ${dobj.getDate()} ${MESES[dobj.getMonth()]} ${dobj.getFullYear()} · ${l.hi}–${l.hf}</span></div><div style="font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap;">${l.texto}</div></div>`;
+  }).join('');
+};
+
+// ===== ALUMNOS =====
+window.renderAlumnosList=()=>{
+  const curso=document.getElementById('al-curso').value;
+  const tbody=document.getElementById('alumnos-tbody');
+  tbody.innerHTML=(ALUMNOS[curso]||[]).map((a,i)=>`
+    <tr class="${a.retirado?'alumno-row-retirado':''}">
+      <td class="num-cell">${a.num}</td>
+      <td>${a.nombre}</td>
+      <td class="run-cell">${a.run||''}</td>
+      <td>${a.retirado?'<span class="badge badge-red">Retirado</span>':'<span class="badge badge-green">Matriculado</span>'}</td>
+      <td style="display:flex;gap:6px;">
+        ${!a.retirado?`<button class="btn btn-sm" onclick="abrirFicha('${curso}',${i})">Ver ficha</button><button class="btn-retirar" onclick="retirarAlumno('${curso}',${i})">Retirar</button>`:`<button class="btn-reactivar" onclick="reactivarAlumno('${curso}',${i})">Reactivar</button>`}
+      </td>
+    </tr>`).join('');
+};
+
+window.showAddAlumno=()=>{ document.getElementById('add-alumno-form').style.display='block'; };
+
+window.agregarAlumno=async()=>{
+  const nombre=document.getElementById('new-nombre').value.trim();
+  const run=document.getElementById('new-run').value.trim();
+  if(!nombre){ showToast('Ingresa el nombre'); return; }
+  const curso=document.getElementById('al-curso').value;
+  const maxNum=Math.max(0,...ALUMNOS[curso].map(a=>a.num));
+  ALUMNOS[curso].push({num:maxNum+1,nombre,run,retirado:false});
+  await saveAlumnos(curso);
+  document.getElementById('new-nombre').value=''; document.getElementById('new-run').value='';
+  document.getElementById('add-alumno-form').style.display='none';
+  renderAlumnosList(); showToast('Estudiante agregado ✓');
+};
+
+window.retirarAlumno=async(curso,idx)=>{
+  if(!confirm('¿Retirar a '+ALUMNOS[curso][idx].nombre+'?')) return;
+  ALUMNOS[curso][idx].retirado=true; await saveAlumnos(curso); renderAlumnosList(); showToast('Estudiante retirado');
+};
+window.reactivarAlumno=async(curso,idx)=>{ ALUMNOS[curso][idx].retirado=false; await saveAlumnos(curso); renderAlumnosList(); showToast('Estudiante reactivado ✓'); };
+
+// ===== FICHA =====
+let currentFicha={curso:null,idx:null};
+window.abrirFicha=async(curso,idx)=>{
+  currentFicha={curso,idx};
+  const a=ALUMNOS[curso][idx];
+  const color=COLORS[curso];
+  const ini=a.nombre.split(' ').filter(Boolean);
+  const initials=(ini[0]?ini[0][0]:'')+(ini[2]?ini[2][0]:'');
+  document.getElementById('ficha-header').innerHTML=`<div class="hv-avatar" style="background:${color};">${initials}</div><div><div class="hv-name">${a.nombre}</div><div class="hv-sub">1° Medio ${curso}</div></div>`;
+  // Load ficha data
+  const snap=await getDoc(doc(db,'ficha',`${curso}_${idx}`));
+  const data=snap.exists()?snap.data():{};
+  document.getElementById('hv-ap-pat').value=data.apPat||'';
+  document.getElementById('hv-ap-mat').value=data.apMat||'';
+  document.getElementById('hv-nombres').value=data.nombres||'';
+  document.getElementById('hv-run').value=a.run||'';
+  document.getElementById('hv-nacimiento').value=data.nacimiento||'';
+  document.getElementById('hv-sexo').value=data.sexo||'Masculino';
+  document.getElementById('hv-nacionalidad').value=data.nacionalidad||'Chilena';
+  document.getElementById('hv-ciudad').value=data.ciudad||'';
+  document.getElementById('hv-direccion').value=data.direccion||'';
+  document.getElementById('hv-telefono').value=data.telefono||'';
+  document.getElementById('hv-email').value=data.email||'';
+  document.getElementById('hv-contacto').value=data.contacto||'';
+  document.getElementById('hv-tel-emergencia').value=data.telEmergencia||'';
+  document.getElementById('hv-ap-nombre').value=data.apNombre||'';
+  document.getElementById('hv-ap-run').value=data.apRun||'';
+  document.getElementById('hv-ap-parentesco').value=data.apParentesco||'Padre';
+  document.getElementById('hv-ap-tel').value=data.apTel||'';
+  document.getElementById('hv-ap-email').value=data.apEmail||'';
+  document.getElementById('hv-ap-dir').value=data.apDir||'';
+  await renderObservaciones();
+  showHvTab('datos');
+  document.getElementById('alumnos-lista-view').style.display='none';
+  document.getElementById('ficha-view').style.display='block';
+};
+
+window.showListaAlumnos=()=>{ document.getElementById('ficha-view').style.display='none'; document.getElementById('alumnos-lista-view').style.display='block'; };
+window.showHvTab=tab=>{ ['datos','apoderado','hoja'].forEach(t=>{ document.getElementById('hv-panel-'+t).className='hv-panel'+(t===tab?' active':''); document.getElementById('hv-tab-'+t).className='hv-tab'+(t===tab?' active':''); }); };
+
+window.guardarFicha=async(seccion)=>{
+  const {curso,idx}=currentFicha;
+  const snap=await getDoc(doc(db,'ficha',`${curso}_${idx}`));
+  const data=snap.exists()?snap.data():{};
+  if(seccion==='datos') Object.assign(data,{apPat:document.getElementById('hv-ap-pat').value,apMat:document.getElementById('hv-ap-mat').value,nombres:document.getElementById('hv-nombres').value,nacimiento:document.getElementById('hv-nacimiento').value,sexo:document.getElementById('hv-sexo').value,nacionalidad:document.getElementById('hv-nacionalidad').value,ciudad:document.getElementById('hv-ciudad').value,direccion:document.getElementById('hv-direccion').value,telefono:document.getElementById('hv-telefono').value,email:document.getElementById('hv-email').value,contacto:document.getElementById('hv-contacto').value,telEmergencia:document.getElementById('hv-tel-emergencia').value});
+  else Object.assign(data,{apNombre:document.getElementById('hv-ap-nombre').value,apRun:document.getElementById('hv-ap-run').value,apParentesco:document.getElementById('hv-ap-parentesco').value,apTel:document.getElementById('hv-ap-tel').value,apEmail:document.getElementById('hv-ap-email').value,apDir:document.getElementById('hv-ap-dir').value});
+  await setDoc(doc(db,'ficha',`${curso}_${idx}`),data);
+  showToast('Datos guardados ✓');
+};
+
+async function renderObservaciones(){
+  const {curso,idx}=currentFicha;
+  const snap=await getDoc(doc(db,'observaciones',`${curso}_${idx}`));
+  const obs=snap.exists()?snap.data().lista||[]:[]; 
+  const list=document.getElementById('obs-list');
+  if(!obs.length){ list.innerHTML='<div class="empty-state">No hay observaciones registradas</div>'; return; }
+  list.innerHTML=obs.map((o,i)=>{
+    const color=o.tipo==='positiva'?'var(--green)':o.tipo==='negativa'?'var(--red)':'var(--amber)';
+    const bg=o.tipo==='positiva'?'var(--green-light)':o.tipo==='negativa'?'var(--red-light)':'var(--amber-light)';
+    const label=o.tipo==='positiva'?'✓ Positiva':o.tipo==='negativa'?'✗ Negativa':'● Neutra';
+    return `<div class="obs-entry obs-type-${o.tipo==='positiva'?'pos':o.tipo==='negativa'?'neg':'neu'}">
+      <button class="obs-del" onclick="eliminarObs(${i})">×</button>
+      <span class="obs-badge" style="background:${bg};color:${color};">${label}</span>
+      <span class="obs-date" style="margin-left:8px;">${o.fecha}</span>
+      <div class="obs-text" style="margin-top:4px;">${o.texto}</div>
+    </div>`;
+  }).join('');
+}
+
+window.agregarObservacion=async()=>{
+  const texto=document.getElementById('nueva-obs-text').value.trim();
+  if(!texto){ showToast('Escribe una observación'); return; }
+  const tipo=document.querySelector('input[name="obs-tipo"]:checked').value;
+  const {curso,idx}=currentFicha;
+  const snap=await getDoc(doc(db,'observaciones',`${curso}_${idx}`));
+  const obs=snap.exists()?snap.data().lista||[]:[]; 
+  const now=new Date();
+  obs.unshift({texto,tipo,fecha:`${now.getDate().toString().padStart(2,'0')}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getFullYear()}`});
+  await setDoc(doc(db,'observaciones',`${curso}_${idx}`),{lista:obs});
+  document.getElementById('nueva-obs-text').value='';
+  await renderObservaciones(); showToast('Observación agregada ✓');
+};
+
+window.eliminarObs=async(obsIdx)=>{
+  if(!confirm('¿Eliminar esta observación?')) return;
+  const {curso,idx}=currentFicha;
+  const snap=await getDoc(doc(db,'observaciones',`${curso}_${idx}`));
+  const obs=snap.exists()?snap.data().lista||[]:[];
+  obs.splice(obsIdx,1);
+  await setDoc(doc(db,'observaciones',`${curso}_${idx}`),{lista:obs});
+  await renderObservaciones(); showToast('Observación eliminada');
+};
+
+// ===== NAV =====
+window.abrirCursoHoy=curso=>{
+  const hoy=new Date(); const dw=hoy.getDay();
+  const cl=CLASES.find(c=>c.curso===curso&&c.dia===dw&&esFechaValida(hoy));
+  if(cl){ abrirClase(fechaStr(hoy),cl.id,cl.curso,cl.hi,cl.hf); return; }
+  for(let i=1;i<=7;i++){ const d=new Date(hoy); d.setDate(hoy.getDate()+i); const cl2=CLASES.find(c=>c.curso===curso&&c.dia===d.getDay()); if(cl2&&esFechaValida(d)){ abrirClase(fechaStr(d),cl2.id,cl2.curso,cl2.hi,cl2.hf); return; } }
+};
+
+window.goPage=(name,navEl)=>{
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(navEl) navEl.classList.add('active');
+  else { const map={calendario:'calendario',gestion:'gestion',progreso:'progreso',historial:'historial',alumnos:'alumnos',clase:'clase'}; }
+  if(name==='progreso') renderProgreso();
+  if(name==='historial') renderHistorial();
+  if(name==='gestion') renderGestion();
+  if(name==='alumnos') renderAlumnosList();
+  if(name==='calendario'){ renderCalendar(); renderMiniCal(); }
+};
+
+window.showToast=msg=>{ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); };
+</script>
+</body>
+</html>
