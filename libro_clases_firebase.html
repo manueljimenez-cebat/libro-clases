@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Libro de Clases — Prof. Jiménez Manuel</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --purple:#7c3aed;--purple-dark:#6d28d9;--purple-light:#ede9fe;--purple-mid:#ddd6fe;
+  --green:#16a34a;--green-light:#dcfce7;
+  --red:#dc2626;--red-light:#fee2e2;
+  --amber:#d97706;--amber-light:#fef3c7;
+  --slate:#64748b;--slate-light:#f1f5f9;
+  --bg:#f8f7ff;--white:#ffffff;
+  --border:#e2e0f0;--border-light:#f0eef8;
+  --text:#1e1b2e;--text-2:#6b6880;--text-3:#9d9ab0;
+  --radius:10px;--radius-sm:6px;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh;}
+
+/* LOGIN */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#4c1d95,#7c3aed,#6d28d9);}
+.login-card{background:white;border-radius:16px;padding:40px;text-align:center;width:340px;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.login-logo{width:56px;height:56px;background:var(--purple);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+.login-logo svg{width:28px;height:28px;fill:white;}
+.login-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.login-sub{font-size:13px;color:var(--text-2);margin-bottom:28px;line-height:1.5;}
+.login-school{font-size:12px;color:var(--text-3);margin-bottom:24px;}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px;border-radius:8px;border:1.5px solid #e2e8f0;background:white;cursor:pointer;font-size:14px;font-weight:600;color:#374151;transition:all .15s;}
+.btn-google:hover{background:#f9fafb;border-color:#cbd5e1;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+.btn-google svg{width:20px;height:20px;}
+
+/* TOPBAR */
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.brand{display:flex;align-items:center;gap:10px;}
+.logo{width:34px;height:34px;border-radius:8px;background:var(--purple);display:flex;align-items:center;justify-content:center;}
+.logo svg{width:18px;height:18px;fill:white;}
+.brand-name{font-size:15px;font-weight:600;color:var(--purple);}
+.school{font-size:11px;color:var(--text-2);}
+.user-area{display:flex;align-items:center;gap:10px;}
+.user-photo{width:32px;height:32px;border-radius:50%;object-fit:cover;}
+.user-name{font-size:13px;font-weight:500;}
+.btn-signout{font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:white;cursor:pointer;color:var(--text-2);}
+.btn-signout:hover{background:var(--border-light);}
+
+/* LAYOUT */
+.layout{display:flex;height:calc(100vh - 52px);}
+.sidebar{width:210px;background:var(--white);border-right:1px solid var(--border);padding:12px 8px;overflow-y:auto;flex-shrink:0;}
+.nav-section{font-size:10px;font-weight:600;color:var(--text-3);padding:10px 12px 5px;letter-spacing:.08em;text-transform:uppercase;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;color:var(--text-2);transition:all .12s;margin-bottom:1px;}
+.nav-item:hover{background:var(--purple-light);color:var(--purple);}
+.nav-item.active{background:var(--purple-light);color:var(--purple);font-weight:600;}
+.nav-icon{width:15px;height:15px;flex-shrink:0;opacity:.8;}
+.nav-item.active .nav-icon{opacity:1;}
+.course-pill{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;border-radius:var(--radius-sm);cursor:pointer;font-size:12px;color:var(--text-2);margin-bottom:2px;}
+.course-pill:hover{background:var(--border-light);}
+.course-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.main{flex:1;overflow-y:auto;}
+
+/* PAGES */
+.page{display:none;padding:24px;}
+.page.active{display:block;}
+.page-header{margin-bottom:20px;}
+.page-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.page-sub{font-size:13px;color:var(--text-2);}
+
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;}
+
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+select,input[type=text],input[type=date]{font-size:13px;padding:7px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--white);color:var(--text);outline:none;}
+select:focus,input:focus{border-color:var(--purple);}
+.btn{font-size:13px;padding:7px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--white);color:var(--text);cursor:pointer;transition:all .12s;white-space:nowrap;font-weight:500;}
+.btn:hover{background:var(--border-light);}
+.btn-purple{background:var(--purple);color:#fff;border-color:var(--purple);}
+.btn-purple:hover{background:var(--purple-dark);}
+.btn-sm{font-size:12px;padding:5px 11px;}
+.btn-outline-purple{border-color:var(--purple);color:var(--purple);}
+.btn-outline-purple:hover{background:var(--purple-light);}
+
+/* HORARIO */
+.schedule-grid{display:grid;grid-template-columns:80px repeat(5,1fr);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--white);}
+.sg-header{padding:10px;font-size:12px;font-weight:700;text-align:center;background:var(--purple);color:#fff;border-right:1px solid rgba(255,255,255,.2);}
+.sg-time{padding:8px 6px;font-size:11px;color:var(--text-2);text-align:center;border-right:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg);line-height:1.4;}
+.sg-cell{padding:5px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);min-height:52px;display:flex;align-items:center;justify-content:center;}
+.sg-class{border-radius:6px;padding:5px 7px;text-align:center;cursor:pointer;transition:all .12s;width:100%;}
+.sg-class:hover{filter:brightness(.95);}
+.sg-class .c-name{font-size:12px;font-weight:700;}
+.sg-class .c-time{font-size:10px;opacity:.7;}
+.sg-badges{display:flex;gap:2px;justify-content:center;margin-top:3px;flex-wrap:wrap;}
+.sg-badge{font-size:9px;padding:1px 5px;border-radius:8px;color:#fff;font-weight:600;}
+.sg-break{background:#fafafa;color:var(--text-3);font-size:11px;text-align:center;font-style:italic;}
+
+/* CLASE */
+.clase-chip{background:var(--purple);color:#fff;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700;}
+.tab-bar{display:flex;background:var(--purple-light);border-bottom:1px solid var(--purple-mid);padding:0 18px;gap:2px;}
+.tab{padding:10px 16px;font-size:13px;cursor:pointer;color:var(--purple);border-bottom:2px solid transparent;display:flex;align-items:center;gap:6px;font-weight:500;}
+.tab:hover{background:rgba(124,58,237,.08);border-radius:6px 6px 0 0;}
+.tab.active{background:var(--white);border-radius:6px 6px 0 0;border-bottom:2px solid var(--white);font-weight:700;}
+.tab-panel{padding:18px;display:none;}
+.tab-panel.active{display:block;}
+
+/* STATS */
+.stats-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center;}
+.stat-pill{padding:5px 14px;border-radius:20px;font-size:13px;font-weight:600;}
+.pill-green{background:var(--green-light);color:var(--green);}
+.pill-red{background:var(--red-light);color:var(--red);}
+.pill-amber{background:var(--amber-light);color:var(--amber);}
+.pill-slate{background:var(--slate-light);color:var(--slate);}
+.asist-actions{margin-left:auto;display:flex;gap:6px;}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{font-size:11px;font-weight:600;color:var(--text-2);padding:6px 8px 8px;border-bottom:2px solid var(--border);text-align:left;white-space:nowrap;background:var(--bg);}
+td{padding:9px 8px;border-bottom:1px solid var(--border-light);color:var(--text);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#faf9ff;}
+.num-cell{color:var(--text-3);font-size:12px;width:36px;text-align:center;}
+.run-cell{font-size:11px;color:var(--text-3);}
+.name-crossed{text-decoration:line-through;color:var(--text-3);}
+
+/* BOTONES ASISTENCIA */
+.ebtn-group{display:flex;gap:4px;}
+.ebtn{width:36px;height:30px;border-radius:6px;border:1.5px solid var(--border);cursor:pointer;font-size:11px;font-weight:700;transition:all .1s;background:var(--white);color:var(--text-3);}
+.ebtn:hover{border-color:#aaa;color:var(--text);}
+.ebtn.on-p{background:var(--green);color:#fff;border-color:var(--green);}
+.ebtn.on-a{background:var(--red);color:#fff;border-color:var(--red);}
+.ebtn.on-at{background:var(--amber);color:#fff;border-color:var(--amber);}
+.ebtn.on-r{background:var(--slate);color:#fff;border-color:var(--slate);}
+.obs-input{font-size:11px;padding:3px 7px;border:1px solid var(--border);border-radius:5px;color:var(--text-2);width:140px;background:var(--white);}
+
+/* LECCIONARIO */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.form-full{grid-column:1/-1;}
+.form-group{display:flex;flex-direction:column;gap:4px;}
+.form-group label{font-size:11px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;}
+.form-group input,.form-group select,.form-group textarea{font-size:13px;padding:8px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--white);color:var(--text);width:100%;}
+.form-group textarea{resize:vertical;min-height:70px;font-family:inherit;}
+.lec-saved-card{border:1px solid var(--purple-mid);border-radius:var(--radius);padding:14px 16px;background:var(--purple-light);margin-bottom:12px;}
+.tag-oa{display:inline-block;padding:2px 7px;border-radius:12px;font-size:11px;font-weight:600;background:var(--purple);color:#fff;margin-right:4px;}
+.tag-unidad{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;background:#e0f2fe;color:#0369a1;}
+
+/* PROGRESO */
+.pct-bar-bg{background:var(--border);border-radius:4px;height:6px;width:80px;overflow:hidden;display:inline-block;vertical-align:middle;}
+.pct-bar{height:100%;border-radius:4px;}
+.badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600;}
+.badge-green{background:var(--green-light);color:var(--green);}
+.badge-red{background:var(--red-light);color:var(--red);}
+.badge-amber{background:var(--amber-light);color:var(--amber);}
+.badge-slate{background:var(--slate-light);color:var(--slate);}
+
+/* HISTORIAL */
+.lec-item{border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;margin-bottom:10px;}
+.lec-item:hover{box-shadow:0 2px 8px rgba(124,58,237,.1);}
+.lec-item-head{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:6px;}
+.lec-item-title{font-size:13px;font-weight:700;}
+.lec-item-date{font-size:11px;color:var(--text-3);margin-left:auto;}
+.lec-item-body{font-size:12px;color:var(--text-2);line-height:1.5;}
+
+.save-bar{padding:12px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;background:#faf9ff;}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--purple);color:#fff;padding:11px 18px;border-radius:var(--radius);font-size:13px;font-weight:500;opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none;z-index:9999;box-shadow:0 4px 12px rgba(124,58,237,.35);}
+.toast.show{opacity:1;transform:translateY(0);}
+.loading{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:12px;color:var(--text-2);font-size:14px;}
+.spinner{width:32px;height:32px;border:3px solid var(--purple-mid);border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.empty-state{text-align:center;padding:40px 20px;color:var(--text-2);font-size:13px;}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading-screen" class="loading">
+  <div class="spinner"></div>
+  <span>Cargando...</span>
+</div>
+
+<!-- LOGIN -->
+<div id="login-screen" style="display:none;">
+  <div class="login-card">
+    <div class="login-logo"><svg viewBox="0 0 20 20"><path d="M10 2L3 7v11h5v-5h4v5h5V7z"/></svg></div>
+    <div class="login-title">Libro de Clases Digital</div>
+    <div class="login-sub">Prof. Jiménez Manuel<br/>Lengua y Literatura</div>
+    <div class="login-school">Centro Educacional Bicentenario Altos de Tomé</div>
+    <button class="btn-google" onclick="loginGoogle()">
+      <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Iniciar sesión con Google
+    </button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none;">
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo"><svg viewBox="0 0 20 20"><path d="M10 2L3 7v11h5v-5h4v5h5V7z"/></svg></div>
+      <div>
+        <div class="brand-name">Libro de Clases</div>
+        <div class="school">Centro Educacional Bicentenario Altos de Tomé</div>
+      </div>
+    </div>
+    <div class="user-area">
+      <img id="user-photo" class="user-photo" src="" style="display:none;"/>
+      <span id="user-name" class="user-name"></span>
+      <button class="btn-signout" onclick="signOut()">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="sidebar">
+      <div class="nav-section">Principal</div>
+      <div class="nav-item active" onclick="goPage('horario',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M2 6h12M6 2v4M10 2v4"/></svg>
+        Mi Horario
+      </div>
+      <div class="nav-item" onclick="goPage('progreso',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12V8l3-3 3 2 3-4 3 2v5"/></svg>
+        Panel de progreso
+      </div>
+      <div class="nav-item" onclick="goPage('historial',this)">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 3h8M4 6h8M4 9h5"/><rect x="2" y="1" width="12" height="14" rx="1.5"/></svg>
+        Leccionario
+      </div>
+      <div class="nav-section" style="margin-top:8px;">Mis Cursos</div>
+      <div style="padding:4px 8px;">
+        <div class="course-pill" onclick="abrirCurso('D')"><span>1° Medio D</span><span class="course-dot" style="background:#7c3aed;"></span></div>
+        <div class="course-pill" onclick="abrirCurso('E')"><span>1° Medio E</span><span class="course-dot" style="background:#0369a1;"></span></div>
+        <div class="course-pill" onclick="abrirCurso('F')"><span>1° Medio F</span><span class="course-dot" style="background:#16a34a;"></span></div>
+        <div class="course-pill" onclick="abrirCurso('G')"><span>1° Medio G</span><span class="course-dot" style="background:#d97706;"></span></div>
+      </div>
+    </div>
+
+    <div class="main">
+      <!-- HORARIO -->
+      <div id="page-horario" class="page active">
+        <div class="page-header">
+          <div class="page-title">Mi Horario — 2026</div>
+          <div class="page-sub">Haz clic en una clase para registrar asistencia y leccionario</div>
+        </div>
+        <div id="horario-grid"></div>
+      </div>
+
+      <!-- CLASE -->
+      <div id="page-clase" class="page">
+        <div style="padding:24px 24px 0;">
+          <button class="btn btn-sm" onclick="goPage('horario',null)" style="margin-bottom:12px;">← Volver al horario</button>
+          <div id="clase-header-info" style="margin-bottom:16px;"></div>
+        </div>
+        <div class="card" style="margin:0 24px 24px;">
+          <div class="tab-bar">
+            <div class="tab active" id="tab-btn-asist" onclick="showClassTab('asist')">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 8l2 2 4-4"/><rect x="2" y="2" width="12" height="12" rx="2"/></svg>
+              Asistencia
+            </div>
+            <div class="tab" id="tab-btn-lec" onclick="showClassTab('lec')">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 3h8M4 6h8M4 9h5"/><rect x="2" y="1" width="12" height="14" rx="1.5"/></svg>
+              Leccionario
+            </div>
+          </div>
+          <div id="panel-asist" class="tab-panel active">
+            <div class="stats-row">
+              <div class="stat-pill pill-green" id="pill-p">Presentes 0</div>
+              <div class="stat-pill pill-red" id="pill-a">Ausentes 0</div>
+              <div class="stat-pill pill-amber" id="pill-at">Atrasados 0</div>
+              <div class="stat-pill pill-slate" id="pill-r">Retirados 0</div>
+              <div class="asist-actions">
+                <button class="btn btn-sm btn-outline-purple" onclick="marcarTodos('p')">Todos presentes</button>
+                <button class="btn btn-sm btn-outline-purple" onclick="copiarAnterior()">Copiar anterior</button>
+              </div>
+            </div>
+            <div style="overflow-x:auto;">
+              <table>
+                <thead><tr>
+                  <th>N°</th><th>Estudiante</th><th>RUN</th>
+                  <th style="color:var(--green);">Presente</th>
+                  <th style="color:var(--red);">Ausente</th>
+                  <th style="color:var(--amber);">Atrasado</th>
+                  <th style="color:var(--slate);">Retirado</th>
+                  <th>Observación</th>
+                </tr></thead>
+                <tbody id="asist-tbody"></tbody>
+              </table>
+            </div>
+            <div class="save-bar">
+              <button class="btn btn-purple" onclick="guardarAsistencia()">Guardar asistencia</button>
+            </div>
+          </div>
+          <div id="panel-lec" class="tab-panel">
+            <div id="lec-view"></div>
+            <div id="lec-form" style="display:none;">
+              <div class="form-grid">
+                <div class="form-group"><label>Unidad</label><input type="text" id="f-unidad" placeholder="Ej: Narrativa y Sociedad"/></div>
+                <div class="form-group"><label>Objetivo de Aprendizaje</label><input type="text" id="f-oa" placeholder="Ej: OA3"/></div>
+                <div class="form-group form-full"><label>Título de la clase</label><input type="text" id="f-titulo" placeholder="Ej: El narrador y sus tipos"/></div>
+                <div class="form-group form-full"><label>Contenidos trabajados</label><textarea id="f-contenidos" placeholder="Describe los contenidos abordados..."></textarea></div>
+                <div class="form-group form-full"><label>Actividades realizadas</label><textarea id="f-actividades" placeholder="Lectura guiada, trabajo grupal..."></textarea></div>
+                <div class="form-group form-full"><label>Observaciones</label><textarea id="f-obs" placeholder="Notas generales, clima de aula..."></textarea></div>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <button class="btn btn-purple" onclick="guardarLec()">Guardar leccionario</button>
+                <button class="btn" onclick="toggleLecForm(false)">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROGRESO -->
+      <div id="page-progreso" class="page">
+        <div class="page-header">
+          <div class="page-title">Panel de progreso</div>
+          <div class="page-sub">Asistencia acumulada en el año por alumno</div>
+        </div>
+        <div class="toolbar">
+          <select id="prog-curso" onchange="renderProgreso()">
+            <option value="D">1° Medio D</option><option value="E">1° Medio E</option>
+            <option value="F">1° Medio F</option><option value="G">1° Medio G</option>
+          </select>
+        </div>
+        <div class="card" style="padding:0;">
+          <table><thead><tr>
+            <th>N°</th><th>Estudiante</th><th>Presentes</th><th>Ausentes</th><th>Atrasados</th><th>Retirados</th><th>Clases</th><th>% Asistencia</th>
+          </tr></thead><tbody id="prog-tbody"></tbody></table>
+        </div>
+      </div>
+
+      <!-- HISTORIAL -->
+      <div id="page-historial" class="page">
+        <div class="page-header">
+          <div class="page-title">Leccionario</div>
+          <div class="page-sub">Historial completo de clases registradas</div>
+        </div>
+        <div class="toolbar">
+          <select id="hist-curso" onchange="renderHistorial()">
+            <option value="D">1° Medio D</option><option value="E">1° Medio E</option>
+            <option value="F">1° Medio F</option><option value="G">1° Medio G</option>
+          </select>
+          <select id="hist-unidad" onchange="renderHistorial()"><option value="">Todas las unidades</option></select>
+        </div>
+        <div id="hist-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- FIREBASE SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyARX7xJ72e3HCEDQO8wnsVWIiiir3LXAeY",
+  authDomain: "libro-de-clases-manuel.firebaseapp.com",
+  projectId: "libro-de-clases-manuel",
+  storageBucket: "libro-de-clases-manuel.firebasestorage.app",
+  messagingSenderId: "726362397935",
+  appId: "1:726362397935:web:760553d10c90f89bddcf1a"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+// ===================== AUTH =====================
+window.loginGoogle = async () => {
+  try { await signInWithPopup(auth, provider); }
+  catch(e){ showToast('Error al iniciar sesión'); }
+};
+
+window.signOut = async () => {
+  await fbSignOut(auth);
+};
+
+onAuthStateChanged(auth, user => {
+  document.getElementById('loading-screen').style.display='none';
+  if(user){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    document.getElementById('user-name').textContent = user.displayName||user.email;
+    if(user.photoURL){
+      const img=document.getElementById('user-photo');
+      img.src=user.photoURL; img.style.display='block';
+    }
+    renderHorario();
+  } else {
+    document.getElementById('login-screen').style.display='flex';
+    document.getElementById('app').style.display='none';
+  }
+});
+
+// ===================== DATA =====================
+const CURSOS_COLORES = {D:'#7c3aed',E:'#0369a1',F:'#16a34a',G:'#d97706'};
+const ALUMNOS = {
+  D:[{num:1,nombre:"Acuña Rodríguez Nicolás Antonio",run:"23.786.235-K"},{num:2,nombre:"Agurto Retamal Francisco Andrés",run:"23.786.016-0"},{num:3,nombre:"Benimelis Celedón Danae Antonella",run:"23.917.407-8"},{num:4,nombre:"Campos Roa Monserratt Alejandra",run:"23.149.563-0"},{num:5,nombre:"Carrasco Riquelme Valentina Pascal",run:"23.752.468-3"},{num:6,nombre:"Cuevas Gutiérrez Antonella Anaís",run:"23.919.762-0"},{num:7,nombre:"Flores Velásquez Antonella Pascal",run:"23.823.035-7"},{num:8,nombre:"Gutiérrez Muñoz Tomás Agustín",run:"23.896.112-2"},{num:9,nombre:"Molina Gálvez Mayra Antonella",run:"23.675.913-K"},{num:10,nombre:"Nanjari Carrasco Zahir Andrés",run:"23.746.215-7"},{num:11,nombre:"Palma Ulloa Rubén Alejandro",run:"23.620.909-1"},{num:12,nombre:"Peña Andrade Colomba Leonor",run:"23.869.188-5"},{num:13,nombre:"Placencia Riquelme Yuliana Pascal",run:"23.780.707-3"},{num:14,nombre:"Rojas Mellado Julieta Ignacia",run:"23.785.797-6"},{num:15,nombre:"Sánchez Henríquez Isidora Monserrat",run:"23.642.918-0"},{num:16,nombre:"Sepúlveda Sepúlveda Natividad Monserrat",run:"23.804.371-9"},{num:17,nombre:"Tapia Pérez Quimey Lucía",run:"23.965.763-K"},{num:18,nombre:"Torres Delgado Millaray Isidora",run:"23.969.322-9"},{num:19,nombre:"Ulloa Salgado Mylene Karina",run:"23.759.069-4"}],
+  E:[{num:1,nombre:"Acevedo Iturriaga Matías Iván",run:"23.806.477-5"},{num:2,nombre:"Araneda Salazar Belén Elizabeth",run:"23.943.900-4"},{num:3,nombre:"Caperton Castillo Isaiah Andrew",run:"25.098.952-0"},{num:4,nombre:"Carrasco Sepúlveda Emmanuel Alfonso",run:"23.691.500-K"},{num:5,nombre:"Cuevas Méndez Stefano Eduardo",run:"23.782.568-3"},{num:6,nombre:"Fischer Fischer Herbert Luciano",run:"23.862.656-0"},{num:7,nombre:"Gajardo Pizarro Matías Ignacio",run:"23.889.732-7"},{num:8,nombre:"Garrido Toledo María Victoria Paz",run:"23.699.792-8"},{num:9,nombre:"Irribarra Román Javier Ignacio",run:"23.749.838-0"},{num:11,nombre:"Muñoz Mella Maira Dominique",run:"23.909.259-4"},{num:12,nombre:"Ramírez Leiva Trinidad Alexandra",run:"23.675.327-1"},{num:13,nombre:"Rojas Valenzuela Nelly Isabel",run:"23.266.894-6"},{num:14,nombre:"Rubio Hidalgo Gabriela Monserrat",run:"23.693.702-K"},{num:15,nombre:"San Martín Hidalgo Emilia Trinidad",run:"23.841.692-2"},{num:16,nombre:"Soto Morales Antonia Belén",run:"23.692.954-K"},{num:17,nombre:"Torres Aravena Matías Ignacio",run:"23.752.370-9"},{num:18,nombre:"Villegas Barriento Julio Elizardo",run:"23.775.274-0"}],
+  F:[{num:1,nombre:"Coloma Vilugrón Dominique Atenea",run:"23.707.933-7"},{num:2,nombre:"Contreras Velásquez Valentina Francisca",run:"23.732.138-3"},{num:3,nombre:"Fuentes Gómez Pedro Alberto",run:"23.995.891-5"},{num:4,nombre:"Herrera Sanhueza Ainara Isadora",run:"23.786.021-7"},{num:5,nombre:"Irribarra Mora Martín Alonso",run:"23.750.390-2"},{num:6,nombre:"Irribarra Mora Máximo Rafael",run:"23.750.439-9"},{num:7,nombre:"Jaque Quijada Angelique Mariela",run:"23.937.882-K"},{num:8,nombre:"Latorre Ramírez Cristóbal Andrés",run:"23.945.728-2"},{num:9,nombre:"Martínez Cisternas Héctor Alejandro",run:"23.783.662-6"},{num:10,nombre:"Medina Rocha Henry Isaías",run:"23.678.283-2"},{num:11,nombre:"Muñoz Andrade Monserrat Belén",run:"23.895.175-5"},{num:12,nombre:"Otárola Jara Anaís Belén",run:"23.860.803-1"},{num:13,nombre:"Parra Cisterna Patricio Leonardo",run:"23.738.080-0"},{num:14,nombre:"Rodríguez Navidad Josefa Antonia",run:"23.854.409-2"},{num:15,nombre:"Reyes Baeza Esteban Alonso",run:"23.680.091-1"},{num:16,nombre:"Medina Rocha Benjamín Ariel",run:"23.678.332-4"},{num:17,nombre:"Irribarra Mora Catalina Ignacia",run:"23.750.424-0"}],
+  G:[{num:1,nombre:"Binimelis Álvarez Teresa Antonella",run:"23.892.292-5"},{num:2,nombre:"Bustos Flores Antonella Monserrat",run:"23.660.651-1"},{num:3,nombre:"García Rabanal Angelina Jeanethe",run:"23.824.148-0"},{num:4,nombre:"Garretón Hernández Javier Adolfo",run:"23.814.673-9"},{num:5,nombre:"Lara Gallegos Danahe Anaís",run:"23.729.061-5"},{num:6,nombre:"Macías Cartes Esteban Gonzalo",run:"23.886.089-K"},{num:7,nombre:"Martínez Darat Agustín Alonso",run:"23.865.996-5"},{num:8,nombre:"Muñoz Catril Isabella Anahís",run:"23.799.286-5"},{num:9,nombre:"Muñoz Gómez Dylan Yohussef",run:"23.816.622-5"},{num:10,nombre:"Muñoz Neira Eliza Efziba",run:"23.836.634-8"},{num:11,nombre:"Ortiz Díaz Máximo Vicente",run:"23.773.013-5"},{num:12,nombre:"Vejar Alvear Amanda Paz",run:"23.832.935-3"},{num:13,nombre:"Coronado Melo Phillips Anthony",run:"23.838.907-0"},{num:14,nombre:"Zapata Araneda Mauro Álvaro",run:"23.990.470-K"},{num:15,nombre:"Arellano Hueichaleo Matías Alonso",run:"23.721.156-1"},{num:16,nombre:"Zamorano Jofré Maximiliano Alonzo",run:"23.978.780-0"},{num:17,nombre:"Morales Mardones Alanis Alejandra",run:"23.945.473-9"}]
+};
+
+const HORARIO = [
+  {dia:'Lu',bloque:7,hi:'14:15',hf:'15:00',curso:'G'},{dia:'Lu',bloque:8,hi:'15:00',hf:'15:45',curso:'G'},{dia:'Lu',bloque:9,hi:'15:55',hf:'16:40',curso:'D'},
+  {dia:'Ma',bloque:3,hi:'10:20',hf:'11:05',curso:'D'},{dia:'Ma',bloque:4,hi:'11:05',hf:'11:50',curso:'D'},{dia:'Ma',bloque:5,hi:'12:00',hf:'12:45',curso:'F'},{dia:'Ma',bloque:6,hi:'12:45',hf:'13:30',curso:'F'},{dia:'Ma',bloque:7,hi:'14:15',hf:'15:00',curso:'E'},{dia:'Ma',bloque:8,hi:'15:00',hf:'15:45',curso:'E'},
+  {dia:'Mi',bloque:1,hi:'08:30',hf:'09:15',curso:'E'},{dia:'Mi',bloque:2,hi:'09:15',hf:'10:00',curso:'E'},{dia:'Mi',bloque:3,hi:'10:20',hf:'11:05',curso:'G'},{dia:'Mi',bloque:4,hi:'11:05',hf:'11:50',curso:'G'},{dia:'Mi',bloque:7,hi:'14:15',hf:'15:00',curso:'F'},{dia:'Mi',bloque:8,hi:'15:00',hf:'15:45',curso:'F'},{dia:'Mi',bloque:9,hi:'15:55',hf:'16:40',curso:'D'},
+  {dia:'Ju',bloque:1,hi:'08:30',hf:'09:15',curso:'F'},{dia:'Ju',bloque:2,hi:'09:15',hf:'10:00',curso:'F'},{dia:'Ju',bloque:3,hi:'10:20',hf:'11:05',curso:'D'},{dia:'Ju',bloque:4,hi:'11:05',hf:'11:50',curso:'D'},{dia:'Ju',bloque:5,hi:'12:00',hf:'12:45',curso:'G'},{dia:'Ju',bloque:6,hi:'12:45',hf:'13:30',curso:'G'},{dia:'Ju',bloque:7,hi:'14:15',hf:'15:00',curso:'E'},{dia:'Ju',bloque:8,hi:'15:00',hf:'15:45',curso:'E'},
+  {dia:'Vi',bloque:3,hi:'10:20',hf:'11:05',curso:'F'},{dia:'Vi',bloque:4,hi:'11:05',hf:'11:50',curso:'F'},{dia:'Vi',bloque:5,hi:'12:00',hf:'12:45',curso:'G'},{dia:'Vi',bloque:6,hi:'12:45',hf:'13:30',curso:'G'},{dia:'Vi',bloque:7,hi:'14:15',hf:'15:00',curso:'D'},{dia:'Vi',bloque:8,hi:'15:00',hf:'15:45',curso:'D'},
+];
+
+const BLOQUES_DEF = [
+  {n:1,hi:'08:30',hf:'09:15'},{n:2,hi:'09:15',hf:'10:00'},
+  {n:'R1',label:'Recreo'},{n:3,hi:'10:20',hf:'11:05'},{n:4,hi:'11:05',hf:'11:50'},
+  {n:'R2',label:'2° Recreo'},{n:5,hi:'12:00',hf:'12:45'},{n:6,hi:'12:45',hf:'13:30'},
+  {n:'AL',label:'Almuerzo'},{n:7,hi:'14:15',hf:'15:00'},{n:8,hi:'15:00',hf:'15:45'},
+  {n:'R3',label:'3° Recreo'},{n:9,hi:'15:55',hf:'16:40'},{n:10,hi:'16:40',hf:'17:25'},
+];
+const DIAS = ['Lu','Ma','Mi','Ju','Vi'];
+const DIA_NOMBRES = {Lu:'Lunes',Ma:'Martes',Mi:'Miércoles',Ju:'Jueves',Vi:'Viernes'};
+
+function claseKey(dia,bloque,curso){return `${dia}_${bloque}_${curso}`;}
+
+// ===================== FIRESTORE HELPERS =====================
+async function fsGetAsist(key){
+  const snap = await getDoc(doc(db,'asistencia',key));
+  return snap.exists()?snap.data():null;
+}
+async function fsSetAsist(key,data){
+  await setDoc(doc(db,'asistencia',key),data);
+}
+async function fsGetLec(key){
+  const snap = await getDoc(doc(db,'leccionario',key));
+  return snap.exists()?snap.data():null;
+}
+async function fsSetLec(key,data){
+  await setDoc(doc(db,'leccionario',key),data);
+}
+async function fsGetAllAsist(curso){
+  const keys = HORARIO.filter(h=>h.curso===curso).map(h=>claseKey(h.dia,h.bloque,h.curso));
+  const results={};
+  await Promise.all(keys.map(async k=>{
+    const snap=await getDoc(doc(db,'asistencia',k));
+    if(snap.exists()) results[k]=snap.data();
+  }));
+  return results;
+}
+async function fsGetAllLec(curso){
+  const keys = HORARIO.filter(h=>h.curso===curso).map(h=>claseKey(h.dia,h.bloque,h.curso));
+  const results={};
+  await Promise.all(keys.map(async k=>{
+    const snap=await getDoc(doc(db,'leccionario',k));
+    if(snap.exists()) results[k]=snap.data();
+  }));
+  return results;
+}
+
+// ===================== HORARIO =====================
+let asistCache={};
+let lecCache={};
+
+window.renderHorario = async () => {
+  // Load all saved keys to show badges
+  const allKeys = HORARIO.map(h=>claseKey(h.dia,h.bloque,h.curso));
+  await Promise.all(allKeys.map(async k=>{
+    const aSnap=await getDoc(doc(db,'asistencia',k));
+    if(aSnap.exists()) asistCache[k]=true;
+    const lSnap=await getDoc(doc(db,'leccionario',k));
+    if(lSnap.exists()) lecCache[k]=true;
+  }));
+
+  const lookup={};
+  HORARIO.forEach(h=>{ lookup[`${h.dia}_${h.bloque}`]=h; });
+  let html='<div class="schedule-grid">';
+  html+='<div class="sg-header" style="background:#4c1d95;">Bloque</div>';
+  DIAS.forEach(d=>{html+=`<div class="sg-header">${DIA_NOMBRES[d]}</div>`;});
+  BLOQUES_DEF.forEach(b=>{
+    if(typeof b.n==='string'){
+      html+=`<div class="sg-time sg-break">${b.label}</div>`;
+      DIAS.forEach(()=>{html+=`<div class="sg-cell sg-break"></div>`;});
+      return;
+    }
+    html+=`<div class="sg-time"><strong>${b.n}</strong><br/>${b.hi}<br/>${b.hf}</div>`;
+    DIAS.forEach(dia=>{
+      const h=lookup[`${dia}_${b.n}`];
+      if(h){
+        const key=claseKey(dia,b.n,h.curso);
+        const color=CURSOS_COLORES[h.curso];
+        html+=`<div class="sg-cell"><div class="sg-class" onclick="abrirClase('${dia}',${b.n},'${h.curso}','${b.hi}','${b.hf}')" style="border:1.5px solid ${color}30;background:${color}12;">
+          <div class="c-name" style="color:${color};">1° ${h.curso}</div>
+          <div class="c-time" style="color:${color}99;">${b.hi}–${b.hf}</div>
+          <div class="sg-badges">
+            ${asistCache[key]?`<span class="sg-badge" style="background:${color};">✓ asist</span>`:''}
+            ${lecCache[key]?`<span class="sg-badge" style="background:#0369a1;">✓ lec</span>`:''}
+          </div>
+        </div></div>`;
+      } else {
+        html+=`<div class="sg-cell" style="color:var(--text-3);font-size:12px;">—</div>`;
+      }
+    });
+  });
+  html+='</div>';
+  document.getElementById('horario-grid').innerHTML=html;
+};
+
+// ===================== CLASE =====================
+let currentClase=null;
+let asistTemp={};
+let obsTemp={};
+
+window.abrirClase = async (dia,bloque,curso,hi,hf) => {
+  currentClase={key:claseKey(dia,bloque,curso),dia,bloque,curso,hi,hf};
+  const color=CURSOS_COLORES[curso];
+  document.getElementById('clase-header-info').innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <span style="background:${color};color:#fff;padding:3px 12px;border-radius:20px;font-size:13px;font-weight:700;">1° Medio ${curso}</span>
+      <span style="font-size:16px;font-weight:700;">Lengua y Literatura</span>
+      <span style="font-size:13px;color:var(--text-2);">${DIA_NOMBRES[dia]} · ${hi} – ${hf}</span>
+    </div>`;
+  showClassTab('asist');
+  await renderAsistencia();
+  goPage('clase',null);
+};
+
+window.abrirCurso = curso => {
+  const h=HORARIO.find(x=>x.curso===curso);
+  if(h) abrirClase(h.dia,h.bloque,h.curso,h.hi,h.hf);
+};
+
+window.renderAsistencia = async () => {
+  if(!currentClase) return;
+  const {key,curso}=currentClase;
+  const saved=await fsGetAsist(key);
+  asistTemp={};
+  obsTemp={};
+  if(saved){
+    ALUMNOS[curso].forEach((_,i)=>{ asistTemp[i]=saved['est_'+i]||'p'; obsTemp[i]=saved['obs_'+i]||''; });
+  } else {
+    ALUMNOS[curso].forEach((_,i)=>{ asistTemp[i]='p'; obsTemp[i]=''; });
+  }
+  updateStats();
+  const tbody=document.getElementById('asist-tbody');
+  tbody.innerHTML='';
+  (ALUMNOS[curso]||[]).forEach((a,i)=>{
+    const est=asistTemp[i];
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="num-cell">${a.num}</td>
+      <td class="${est==='r'?'name-crossed':''}" id="nm_${i}">${a.nombre}</td>
+      <td class="run-cell">${a.run}</td>
+      <td><button class="ebtn ${est==='p'?'on-p':''}" onclick="setEst(${i},'p')">P</button></td>
+      <td><button class="ebtn ${est==='a'?'on-a':''}" onclick="setEst(${i},'a')">A</button></td>
+      <td><button class="ebtn ${est==='at'?'on-at':''}" onclick="setEst(${i},'at')">AT</button></td>
+      <td><button class="ebtn ${est==='r'?'on-r':''}" onclick="setEst(${i},'r')">R</button></td>
+      <td><input class="obs-input" placeholder="Observación..." value="${obsTemp[i]}" onchange="obsTemp[${i}]=this.value"/></td>`;
+    tbody.appendChild(tr);
+  });
+};
+
+window.setEst = (idx,est) => {
+  asistTemp[idx]=est;
+  const tbody=document.getElementById('asist-tbody');
+  const row=tbody.rows[idx];
+  ['p','a','at','r'].forEach((e,j)=>{ row.cells[3+j].querySelector('.ebtn').className='ebtn'+(est===e?' on-'+e:''); });
+  row.cells[1].className=est==='r'?'name-crossed':'';
+  updateStats();
+};
+
+function updateStats(){
+  const c={p:0,a:0,at:0,r:0};
+  Object.values(asistTemp).forEach(v=>c[v]++);
+  document.getElementById('pill-p').textContent='Presentes '+c.p;
+  document.getElementById('pill-a').textContent='Ausentes '+c.a;
+  document.getElementById('pill-at').textContent='Atrasados '+c.at;
+  document.getElementById('pill-r').textContent='Retirados '+c.r;
+}
+
+window.marcarTodos = est => {
+  (ALUMNOS[currentClase.curso]||[]).forEach((_,i)=>{ asistTemp[i]=est; });
+  renderAsistencia();
+};
+
+window.copiarAnterior = async () => {
+  const {dia,bloque,curso}=currentClase;
+  const ordenadas=HORARIO.filter(h=>h.curso===curso)
+    .sort((a,b)=>DIAS.indexOf(a.dia)*10+a.bloque-(DIAS.indexOf(b.dia)*10+b.bloque));
+  const idx=ordenadas.findIndex(h=>h.dia===dia&&h.bloque===bloque);
+  if(idx<=0){showToast('No hay clase anterior');return;}
+  const prev=ordenadas[idx-1];
+  const prevKey=claseKey(prev.dia,prev.bloque,prev.curso);
+  const prevData=await fsGetAsist(prevKey);
+  if(!prevData){showToast('La clase anterior no tiene asistencia guardada');return;}
+  (ALUMNOS[curso]||[]).forEach((_,i)=>{ asistTemp[i]=prevData['est_'+i]||'p'; });
+  renderAsistencia();
+  showToast('Asistencia copiada');
+};
+
+window.guardarAsistencia = async () => {
+  if(!currentClase) return;
+  const data={savedAt:new Date().toISOString(),curso:currentClase.curso};
+  (ALUMNOS[currentClase.curso]||[]).forEach((_,i)=>{
+    data['est_'+i]=asistTemp[i]||'p';
+    data['obs_'+i]=obsTemp[i]||'';
+  });
+  await fsSetAsist(currentClase.key,data);
+  asistCache[currentClase.key]=true;
+  showToast('Asistencia guardada en la nube ✓');
+};
+
+// ===================== LECCIONARIO =====================
+window.showClassTab = tab => {
+  document.getElementById('panel-asist').className='tab-panel'+(tab==='asist'?' active':'');
+  document.getElementById('panel-lec').className='tab-panel'+(tab==='lec'?' active':'');
+  document.getElementById('tab-btn-asist').className='tab'+(tab==='asist'?' active':'');
+  document.getElementById('tab-btn-lec').className='tab'+(tab==='lec'?' active':'');
+  if(tab==='lec') renderLecView();
+};
+
+window.renderLecView = async () => {
+  if(!currentClase) return;
+  const lec=await fsGetLec(currentClase.key);
+  const el=document.getElementById('lec-view');
+  if(!lec){
+    el.innerHTML=`<div class="empty-state">No hay leccionario para esta clase aún.<br/><br/><button class="btn btn-purple btn-sm" onclick="toggleLecForm(true)">+ Registrar leccionario</button></div>`;
+    toggleLecForm(false,true); return;
+  }
+  el.innerHTML=`<div class="lec-saved-card">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;">
+      <div>${lec.oa?`<span class="tag-oa">${lec.oa}</span>`:''} ${lec.unidad?`<span class="tag-unidad">${lec.unidad}</span>`:''}</div>
+      <button class="btn btn-sm btn-outline-purple" onclick="toggleLecForm(true)">Editar</button>
+    </div>
+    <div style="font-size:14px;font-weight:700;margin-bottom:8px;">${lec.titulo}</div>
+    ${lec.contenidos?`<div style="font-size:12px;color:var(--text-2);margin-bottom:4px;"><strong>Contenidos:</strong> ${lec.contenidos}</div>`:''}
+    ${lec.actividades?`<div style="font-size:12px;color:var(--text-2);margin-bottom:4px;"><strong>Actividades:</strong> ${lec.actividades}</div>`:''}
+    ${lec.obs?`<div style="font-size:12px;color:var(--text-3);font-style:italic;"><strong>Obs:</strong> ${lec.obs}</div>`:''}
+  </div>`;
+  toggleLecForm(false,true);
+};
+
+window.toggleLecForm = (show,skipRender) => {
+  document.getElementById('lec-form').style.display=show?'block':'none';
+  if(show&&!skipRender){
+    fsGetLec(currentClase.key).then(lec=>{
+      lec=lec||{};
+      document.getElementById('f-unidad').value=lec.unidad||'';
+      document.getElementById('f-oa').value=lec.oa||'';
+      document.getElementById('f-titulo').value=lec.titulo||'';
+      document.getElementById('f-contenidos').value=lec.contenidos||'';
+      document.getElementById('f-actividades').value=lec.actividades||'';
+      document.getElementById('f-obs').value=lec.obs||'';
+    });
+  }
+};
+
+window.guardarLec = async () => {
+  const titulo=document.getElementById('f-titulo').value.trim();
+  if(!titulo){showToast('Ingresa el título de la clase');return;}
+  const data={
+    unidad:document.getElementById('f-unidad').value,
+    oa:document.getElementById('f-oa').value,
+    titulo,
+    contenidos:document.getElementById('f-contenidos').value,
+    actividades:document.getElementById('f-actividades').value,
+    obs:document.getElementById('f-obs').value,
+    dia:currentClase.dia,bloque:currentClase.bloque,
+    curso:currentClase.curso,hi:currentClase.hi,hf:currentClase.hf,
+    savedAt:new Date().toISOString()
+  };
+  await fsSetLec(currentClase.key,data);
+  lecCache[currentClase.key]=true;
+  toggleLecForm(false);
+  renderLecView();
+  showToast('Leccionario guardado en la nube ✓');
+};
+
+// ===================== PROGRESO =====================
+window.renderProgreso = async () => {
+  const curso=document.getElementById('prog-curso').value;
+  const allAsist=await fsGetAllAsist(curso);
+  const alumnos=ALUMNOS[curso]||[];
+  const tbody=document.getElementById('prog-tbody');
+  tbody.innerHTML=alumnos.map((a,i)=>{
+    let p=0,au=0,at=0,r=0,tot=0;
+    Object.values(allAsist).forEach(d=>{
+      if(d['est_'+i]!==undefined){tot++;
+        const e=d['est_'+i];
+        if(e==='p')p++; else if(e==='a')au++; else if(e==='at')at++; else if(e==='r')r++;
+      }
+    });
+    const pct=tot?Math.round((p+at)*100/tot):null;
+    const pctStr=pct!==null?pct+'%':'—';
+    const barColor=pct===null?'#ccc':pct>=90?'var(--green)':pct>=80?'var(--amber)':'var(--red)';
+    const txtColor=pct===null?'':pct>=90?'color:var(--green);font-weight:600;':pct>=80?'color:var(--amber);font-weight:600;':'color:var(--red);font-weight:600;';
+    return `<tr>
+      <td class="num-cell">${a.num}</td><td>${a.nombre}</td>
+      <td><span class="badge badge-green">${p}</span></td>
+      <td><span class="badge badge-red">${au}</span></td>
+      <td><span class="badge badge-amber">${at}</span></td>
+      <td><span class="badge badge-slate">${r}</span></td>
+      <td style="color:var(--text-2);">${tot}</td>
+      <td><div style="display:flex;align-items:center;gap:8px;">
+        <div class="pct-bar-bg"><div class="pct-bar" style="width:${pct||0}%;background:${barColor};"></div></div>
+        <span style="${txtColor}">${pctStr}</span>
+      </div></td>
+    </tr>`;
+  }).join('');
+};
+
+// ===================== HISTORIAL =====================
+window.renderHistorial = async () => {
+  const curso=document.getElementById('hist-curso').value;
+  const filtroUnidad=document.getElementById('hist-unidad').value;
+  const allLec=await fsGetAllLec(curso);
+  const items=Object.values(allLec).filter(l=>l&&l.titulo)
+    .filter(l=>!filtroUnidad||l.unidad===filtroUnidad)
+    .sort((a,b)=>DIAS.indexOf(a.dia)*10+a.bloque-(DIAS.indexOf(b.dia)*10+b.bloque));
+  const unidades=[...new Set(Object.values(allLec).filter(Boolean).map(l=>l.unidad).filter(Boolean))];
+  const sel=document.getElementById('hist-unidad');
+  const cur=sel.value;
+  sel.innerHTML='<option value="">Todas las unidades</option>'+unidades.map(u=>`<option${cur===u?' selected':''}>${u}</option>`).join('');
+  const color=CURSOS_COLORES[curso];
+  const list=document.getElementById('hist-list');
+  if(!items.length){list.innerHTML='<div class="empty-state">No hay clases registradas para 1° '+curso+' aún.</div>';return;}
+  list.innerHTML=items.map(l=>`<div class="lec-item">
+    <div class="lec-item-head">
+      <span style="background:${color};color:#fff;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:700;">1° ${l.curso}</span>
+      ${l.oa?`<span class="tag-oa">${l.oa}</span>`:''}
+      ${l.unidad?`<span class="tag-unidad">${l.unidad}</span>`:''}
+      <span class="lec-item-title">${l.titulo}</span>
+      <span class="lec-item-date">${DIA_NOMBRES[l.dia]||''} · ${l.hi||''}–${l.hf||''}</span>
+    </div>
+    ${l.contenidos?`<div class="lec-item-body"><strong>Contenidos:</strong> ${l.contenidos}</div>`:''}
+    ${l.actividades?`<div class="lec-item-body"><strong>Actividades:</strong> ${l.actividades}</div>`:''}
+    ${l.obs?`<div class="lec-item-body" style="font-style:italic;color:var(--text-3);"><strong>Obs:</strong> ${l.obs}</div>`:''}
+  </div>`).join('');
+};
+
+// ===================== NAV =====================
+window.goPage = (name,navEl) => {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(navEl) navEl.classList.add('active');
+  if(name==='progreso') renderProgreso();
+  if(name==='historial') renderHistorial();
+  if(name==='horario') renderHorario();
+};
+
+// ===================== TOAST =====================
+window.showToast = msg => {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+};
+</script>
+</body>
+</html>
